@@ -34,8 +34,9 @@ export default {
                 // docx
                 case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                     component = () => import('../DocxVisualizer');
-                break;
+                    break;
                 default:
+                    component = () => import('../LoadingDocument');
                     break;
             }
             return component;
