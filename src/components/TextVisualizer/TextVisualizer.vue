@@ -6,7 +6,8 @@
     </div>
 </template>
 <script>
-import CommonProps from '../CommonProps.vue'
+import CommonProps from '../CommonProps.vue';
+
 export default {
     name: 'text-visualizer',
     mixins: [CommonProps],

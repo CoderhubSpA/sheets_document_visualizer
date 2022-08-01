@@ -28,7 +28,13 @@ export default {
                 case 'text/plain':
                     component = () => import('../TextVisualizer');
                     break;
-            
+                case 'application/pdf':
+                    component = () => import('../PdfVisualizer');
+                    break;
+                // docx
+                case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                    component = () => import('../DocxVisualizer');
+                break;
                 default:
                     break;
             }
