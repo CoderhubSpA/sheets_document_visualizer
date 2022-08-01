@@ -1,13 +1,22 @@
 {
-  "name": "document_visualizer",
+  "name": "sheets_document_visualizer",
   "version": "0.1.0",
   "private": true,
+  "description": "Visualizador de documentos para Sheets",
+  "main": "dist/index.common.js",
+  "module": "dist/index.umd.min.js",
+  "files": [
+    "dist/*",
+    "src/sass/*"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build:lib": "vue-cli-service build --target lib --name index ./src/install.js"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "vue": "^2.6.14"
   },

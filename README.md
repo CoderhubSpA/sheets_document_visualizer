@@ -1,24 +1,33 @@
-# document_visualizer
+# Document Visualizer
 
-## Project setup
-```
-npm install
-```
+Visualizador de documentos para Sheets
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Instalacion en Laravel
+```js
+require('./bootstrap');
+import Vue from 'vue';
+# Vue Lib
+import DocumentVisualizer  from 'sheets_document_visualizer';
+# Estilos
+import 'sheets_document_visualizer/src/sass/app.scss';
+# ...
+Vue.use(DocumentVisualizer)
+#...
+new Vue({
+    el: '#app'
+});
 
-### Compiles and minifies for production
 ```
-npm run build
+## Posibles errores al momento de instalar
+```bash
+ERROR in ../sheets_document_visualizer/dist/index.umd.min.js 2121:82-89
+Module not found: Error: Can't resolve 'process/browser.js' in '.../sheets_document_visualizer/dist'
 ```
-
-### Lints and fixes files
+Agregar en webpack.mix.js
+```js
+mix.options({
+    legacyNodePolyfills: false
+});
+mix.js()...
 ```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[Fuente](https://laravel-mix.com/docs/6.0/legacy-node-polyfills)
