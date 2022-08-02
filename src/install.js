@@ -1,5 +1,5 @@
 import components from '@/components';
-console.log(components)
+
 const DocumentVisualizer = {
     install(Vue) {
         Object.keys(components).forEach((name) => {

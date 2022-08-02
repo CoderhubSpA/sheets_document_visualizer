@@ -1,6 +1,6 @@
 {
   "name": "sheets_document_visualizer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Visualizador de documentos para Sheets",
   "main": "dist/index.common.js",
@@ -31,6 +31,9 @@
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
     "vue-template-compiler": "^2.6.14"
+  },
+  "peerDependencies": {
+    "vue-pdf-app": "^2.1.0"
   },
   "eslintConfig": {
     "root": true,

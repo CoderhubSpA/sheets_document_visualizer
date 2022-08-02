@@ -5,6 +5,10 @@
 </template>
 <script>
 import axios from 'axios';
+import TextVisualizer from '../TextVisualizer';
+import PdfVisualizer from '../PdfVisualizer';
+import DocxVisualizer from '../DocxVisualizer';
+import LoadingDocument from '../LoadingDocument';
 
 export default {
     name: 'document-visualizer',
@@ -38,18 +42,24 @@ export default {
         viewer() {
             let component;
             switch (this.format) {
+                // text y csv
                 case 'text/plain':
-                    component = () => import('../TextVisualizer');
+                    component = TextVisualizer;
+                    // component = () => import('../TextVisualizer');
                     break;
+                // pdf
                 case 'application/pdf':
-                    component = () => import('../PdfVisualizer');
+                    component = PdfVisualizer;
+                    // component = () => import('../PdfVisualizer');
                     break;
                 // docx
                 case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                    component = () => import('../DocxVisualizer');
+                    component = DocxVisualizer;
+                    // component = () => import('../DocxVisualizer');
                     break;
                 default:
-                    component = () => import('../LoadingDocument');
+                    component = LoadingDocument;
+                    // component = () => import('../LoadingDocument');
                     break;
             }
             return component;

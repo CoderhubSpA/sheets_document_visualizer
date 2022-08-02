@@ -24,7 +24,7 @@ export default {
     }),
     methods: {
         /**
-         * Carga del documento .txt
+         * Carga del documento PDF
          * en el visor
          * @return Void
          */
