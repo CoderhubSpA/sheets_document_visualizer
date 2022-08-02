@@ -9,6 +9,7 @@ import TextVisualizer from '../TextVisualizer';
 import PdfVisualizer from '../PdfVisualizer';
 import DocxVisualizer from '../DocxVisualizer';
 import LoadingDocument from '../LoadingDocument';
+import XlsxVisualizer from '../XlsxVisualizer';
 
 export default {
     name: 'document-visualizer',
@@ -57,13 +58,16 @@ export default {
                     component = DocxVisualizer;
                     // component = () => import('../DocxVisualizer');
                     break;
+                case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                    component = XlsxVisualizer;
+                    break;
                 default:
                     component = LoadingDocument;
                     // component = () => import('../LoadingDocument');
                     break;
             }
             return component;
-        }
+        },
     },
     /**
      * Una vez creado el componente
@@ -74,8 +78,13 @@ export default {
         axios.get(this.src, {
             responseType: 'blob',
         }).then((response) => {
+            console.log(response)
             this.format = response.data.type;
             this.blob = new Blob([response.data]);
+        }).catch((error) => {
+            this.format = 'error';
+            this.blob = new Blob([error.response.data]);
+            
         });
     }
 };
