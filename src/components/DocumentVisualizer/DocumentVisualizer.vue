@@ -1,6 +1,6 @@
 <template>
     <div>
-        <component :is="viewer" :blob="blob" :type="type" />
+        <component :is="viewer" :blob="blob" :format="format" />
     </div>
 </template>
 <script>
@@ -9,22 +9,35 @@ import axios from 'axios';
 export default {
     name: 'document-visualizer',
     props: {
+        /**
+         * URL del file a visualizar
+         */
         src: {
             type: String,
             required: true,
         },
     },
     data: () => ({
-        type: '',
+        /**
+         * Formato del archivo obtenido
+         * @format String
+         */
+        format: '',
+        /**
+         * Representacion Blob del archivo
+         * @format Blob
+         */
         blob: null
     }),
     computed: {
-        url() {
-            return this.src;
-        },
+        /**
+         * Importa el componente adecuado, para la visualizacion 
+         * del file segun su formato
+         * @return component
+         */
         viewer() {
             let component;
-            switch (this.type) {
+            switch (this.format) {
                 case 'text/plain':
                     component = () => import('../TextVisualizer');
                     break;
@@ -42,11 +55,16 @@ export default {
             return component;
         }
     },
-    async mounted() {
-        axios.get(this.url, {
+    /**
+     * Una vez creado el componente
+     * procede a realizar la solicitud al endpoint
+     * indicado
+     */
+    async created() {
+        axios.get(this.src, {
             responseType: 'blob',
         }).then((response) => {
-            this.type = response.data.type;
+            this.format = response.data.type;
             this.blob = new Blob([response.data]);
         });
     }

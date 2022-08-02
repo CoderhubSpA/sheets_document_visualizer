@@ -9,16 +9,26 @@
 import CommonProps from '../CommonProps.vue';
 
 export default {
+    /**
+   * Nombre del componente para ser usado de 
+   * forma individual
+   */
     name: 'text-visualizer',
+    /**
+     * Insercion de props comunes entre todos los 
+     * componente
+     */
     mixins: [CommonProps],
     data: () => ({
         text: '',
     }),
-    mounted() {
-        this.parseBlobToText();
-    },
     methods: {
-        async parseBlobToText() {
+        /**
+         * Carga del documento .txt
+         * en el visor
+         * @return Void
+         */
+        async load() {
             this.text = await this.blob.text();
         }
     }

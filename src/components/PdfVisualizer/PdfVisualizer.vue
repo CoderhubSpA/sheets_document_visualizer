@@ -1,25 +1,35 @@
 <template>
-  <div>
-    <vue-pdf-app :pdf="pdf" v-if="pdf" style='height: 100vh;'></vue-pdf-app>
-  </div>
+  <vue-pdf-app 
+    :pdf="pdf"
+    class="pdf-viewer" />
 </template>
 <script>
 import VuePdfApp from 'vue-pdf-app';
 import CommonProps from '../CommonProps.vue'
 
 export default {
+  /**
+   * Nombre del componente para ser usado de 
+   * forma individual
+   */
   name: 'pdf-viewer',
   components: {
     VuePdfApp,
   },
+  /**
+   * Insercion de props comunes entre todos los 
+   * componente
+   */
   mixins: [CommonProps],
   data: () => ({
     pdf: null,
   }),
-  mounted() {
-    this.load();
-  },
   methods: {
+    /**
+     * Carga del documento PDF
+     * en el visor
+     * @return Void
+     */
     load() {
       this.pdf = URL.createObjectURL(this.blob);
     },

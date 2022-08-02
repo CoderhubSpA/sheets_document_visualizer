@@ -2,21 +2,20 @@
 
 ## Props
 
-| Name             | Type     | Description |
-| ---------------- | -------- | ----------- |
-| `src` *required* | `string` | &nbsp;      |
+| Name             | Type     | Description               |
+| ---------------- | -------- | ------------------------- |
+| `src` *required* | `string` | URL del file a visualizar |
 
 ## Data
 
-| Name   | Type      | Description | Initial value |
-| ------ | --------- | ----------- | ------------- |
-| `type` | `string`  |             | `""`          |
-| `blob` | `unknown` |             | `null`        |
+| Name     | Type      | Description                     | Initial value |
+| -------- | --------- | ------------------------------- | ------------- |
+| `format` | `string`  | Formato del archivo obtenido    | `""`          |
+| `blob`   | `unknown` | Representacion Blob del archivo | `null`        |
 
 ## Computed Properties
 
-| Name     | Type      | Description              |
-| -------- | --------- | ------------------------ |
-| `url`    | `object`  | **Dependencies:** `src`  |
-| `viewer` | `unknown` | **Dependencies:** `type` |
+| Name     | Type      | Description                                                                                                    |
+| -------- | --------- | -------------------------------------------------------------------------------------------------------------- |
+| `viewer` | `unknown` | Importa el componente adecuado, para la visualizacion del file segun su formato<br/>**Dependencies:** `format` |
 
