@@ -1,7 +1,7 @@
 @font-face {
     font-family: "pdf";
-    src: url(./pdf-icons/pdf.eot);
-    src: url(./pdf-icons/pdf.eot?#iefix) format("embedded-opentype"), url(./pdf-icons/pdf.woff2) format("woff2"), url(./pdf-icons/pdf.woff) format("woff"), url(./pdf-icons/pdf.ttf) format("truetype"), url(./pdf-icons/pdf.svg?#pdf) format("svg");
+    src: url("pdf.eot");
+    src: url(pdf.eot?#iefix) format("embedded-opentype"), url(pdf.woff2) format("woff2"), url(pdf.woff) format("woff"), url(pdf.ttf) format("truetype"), url(pdf.svg?#pdf) format("svg");
     font-weight: normal;
     font-style: normal;
 }

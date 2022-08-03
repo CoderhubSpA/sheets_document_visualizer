@@ -1,7 +1,9 @@
 {
+  "author": "Coderhub",
+  "license": "ISC",
   "name": "sheets_document_visualizer",
   "version": "0.1.1",
-  "private": true,
+  "private": false,
   "description": "Visualizador de documentos para Sheets",
   "main": "dist/index.common.js",
   "module": "dist/index.umd.min.js",
@@ -33,9 +35,6 @@
     "eslint-plugin-vue": "^8.0.3",
     "vue-template-compiler": "^2.6.14"
   },
-  "peerDependencies": {
-    "vue-pdf-app": "^2.1.0"
-  },
   "eslintConfig": {
     "root": true,
     "env": {
@@ -54,5 +53,16 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paupololi/sheets_document_visualizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/paupololi/sheets_document_visualizer"
+  },
+  "publishConfig": {
+    "@paupololi:registry": "https://npm.pkg.github.com"
+  },
+  "homepage": "https://github.com/paupololi/sheets_document_visualizer#readme"
 }

@@ -6,8 +6,7 @@
 </template>
 <script>
 import VuePdfApp from 'vue-pdf-app';
-import CommonProps from '../CommonProps.vue'
-import "vue-pdf-app/dist/icons/main.css";
+import CommonProps from '../CommonProps.vue';
 
 export default {
   /**
