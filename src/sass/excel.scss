@@ -9,7 +9,7 @@ html[data-excel-viewer-theme="light"] {
     --footer-bg: #f5f6f7;
     --tooltip-color: #fff;
     --tooltip-bg: #000;
-    --tool-icon-bg: url(./light-icon.svg);
+    --tool-icon-bg: url(light-icon.svg);
     --toolbar-color: #000;
     --toolbar-bg: #f5f6f7;
     --sheet-color: #80868b;
@@ -27,7 +27,7 @@ html[data-excel-viewer-theme="dark"] {
     --global-bg: #0a0a0a;
     --tooltip-bg: #505050;
     --tooltip-color: #fff;
-    --tool-icon-bg: url(./dark-icon.svg);
+    --tool-icon-bg: url(dark-icon.svg);
     --toolbar-color: #fff;
     --toolbar-bg: #292929;
     --sheet-color: #ebebeb;

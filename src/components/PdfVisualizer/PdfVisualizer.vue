@@ -2,12 +2,12 @@
   <vue-pdf-app 
     v-if="pdf"
     :pdf="pdf"
-    style="height: 90vh;" />
+    class="pdf-viewer"/>
 </template>
 <script>
 import VuePdfApp from 'vue-pdf-app';
 import CommonProps from '../CommonProps.vue';
-
+import "vue-pdf-app/dist/icons/main.css";
 export default {
   /**
    * Nombre del componente para ser usado de 
@@ -37,9 +37,11 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+
 /**  ! No funciona fuera del componente */
 .pdf-viewer{
-  height: 100vh;
+  height: 90vh;
 }
+
 </style>

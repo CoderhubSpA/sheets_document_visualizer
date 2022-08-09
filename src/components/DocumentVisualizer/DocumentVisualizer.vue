@@ -5,11 +5,6 @@
 </template>
 <script>
 import axios from 'axios';
-import TextVisualizer from '../TextVisualizer';
-import PdfVisualizer from '../PdfVisualizer';
-import DocxVisualizer from '../DocxVisualizer';
-import LoadingDocument from '../LoadingDocument';
-import XlsxVisualizer from '../XlsxVisualizer';
 
 export default {
     name: 'document-visualizer',
@@ -45,25 +40,21 @@ export default {
             switch (this.format) {
                 // text y csv
                 case 'text/plain':
-                    component = TextVisualizer;
-                    // component = () => import('../TextVisualizer');
+                    component = () => import('../TextVisualizer');
                     break;
                 // pdf
                 case 'application/pdf':
-                    component = PdfVisualizer;
-                    // component = () => import('../PdfVisualizer');
+                    component = () => import('../PdfVisualizer');
                     break;
                 // docx
                 case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                    component = DocxVisualizer;
-                    // component = () => import('../DocxVisualizer');
+                    component = () => import('../DocxVisualizer');
                     break;
                 case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                    component = XlsxVisualizer;
+                    component = () => import('../XlsxVisualizer');
                     break;
                 default:
-                    component = LoadingDocument;
-                    // component = () => import('../LoadingDocument');
+                    component = () => import('../LoadingDocument');
                     break;
             }
             return component;
@@ -78,7 +69,6 @@ export default {
         axios.get(this.src, {
             responseType: 'blob',
         }).then((response) => {
-            console.log(response)
             this.format = response.data.type;
             this.blob = new Blob([response.data]);
         }).catch((error) => {
@@ -89,3 +79,6 @@ export default {
     }
 };
 </script>
+<style lang="scss">
+
+</style>
