@@ -1,11 +1,10 @@
 import components from '@/components';
 
-const DocumentVisualizer = {
+export default {
     install(Vue) {
         Object.keys(components).forEach((name) => {
             Vue.component(components[name].name, components[name])
         })
-    }
+    },
+    ...components
 };
-
-export default DocumentVisualizer;

@@ -2,23 +2,22 @@
   "author": "Coderhub",
   "license": "ISC",
   "name": "sheets_document_visualizer",
-  "version": "0.1.2",
+  "version": "0.1.8",
   "private": false,
   "description": "Visualizador de documentos para Sheets",
   "main": "dist/index.common.js",
-  "module": "dist/index.umd.min.js",
   "files": [
-    "dist/*",
-    "src/sass/*"
+    "dist/*"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build:lib": "vue-cli-service build --target lib --name sheets_document_visualizer ./src/install.js"
+    "build:lib": "vue-cli-service build --target lib --name index ./src/install.js"
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "bootstrap-icons": "^1.9.1",
     "core-js": "^3.8.3",
     "excel-viewer": "^1.0.1",
     "mammoth": "^1.4.21",
@@ -33,6 +32,7 @@
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "file-loader": "^6.2.0",
     "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
