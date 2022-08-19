@@ -2,7 +2,7 @@
   "author": "Coderhub",
   "license": "ISC",
   "name": "sheets_document_visualizer",
-  "version": "0.1.8",
+  "version": "0.1.10",
   "private": false,
   "description": "Visualizador de documentos para Sheets",
   "main": "dist/index.common.js",
@@ -21,8 +21,9 @@
     "core-js": "^3.8.3",
     "excel-viewer": "^1.0.1",
     "mammoth": "^1.4.21",
-    "vue": "^2.6.14",
-    "vue-pdf-app": "^2.1.0"
+    "pdfjs-dist": "^2.15.349",
+    "print-js": "^1.6.0",
+    "vue": "^2.6.14"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -32,8 +33,8 @@
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "file-loader": "^6.2.0",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.6.14",
+    "webpack-cli": "^4.10.0"
   },
   "eslintConfig": {
     "root": true,

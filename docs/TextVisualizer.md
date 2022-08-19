@@ -10,7 +10,7 @@
 
 ### load()
 
-Carga del documento .txt
+Carga del documento PDF
 en el visor
 
 **Syntax**

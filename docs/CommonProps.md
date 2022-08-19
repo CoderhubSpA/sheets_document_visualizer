@@ -20,3 +20,7 @@ y metodos de los visualizadores
 load(): void
 ```
 
+**Return value**
+
+Void
+

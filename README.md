@@ -45,3 +45,16 @@ mix.options({
 mix.js()...
 ```
 [Fuente](https://laravel-mix.com/docs/6.0/legacy-node-polyfills)
+
+# TODO
+- Integracion de temas
+- Sobreescritura de metodos y propiedades de los componentes, de forma general e individual
+- Manejo de errores
+- Flexibilizar el input de entrada (blob) 
+- Desarrollo de mas funcionalidades para el visor de pdf
+    - Busqueda de texto
+    - Rotacion de paginas
+    - Scroll Horizontal 
+    - Vista mosaico
+    - Visualizacion de metadata
+    - Muestra de comentarios en el documento
