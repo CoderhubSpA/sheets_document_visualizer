@@ -73,10 +73,6 @@ export default {
     async created() {
         axios.get(this.src, {
             responseType: 'blob',
-            // headers: {
-            //     'Access-Control-Allow-Origin': '*',
-            //     crossDomain: true
-            // }
         }).then((response) => {
             this.format = response.data.type;
             this.blob = new Blob([response.data]);
