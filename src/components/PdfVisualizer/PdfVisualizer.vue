@@ -150,6 +150,7 @@ export default {
         async load() {
             const data = URL.createObjectURL(this.blob);
             this.pdf = await pdfjsLib.getDocument(data);
+            this.$refs['sidebar'].innerHTML = '';
             this.renderDocument()
         },
         /**
@@ -164,14 +165,14 @@ export default {
                 const viewport = page.getViewport({scale: this.scale});
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
-                const outputScale = window.devicePixelRatio || 1;
-                const transform = outputScale !== 1
-                        ? [outputScale, 0, 0, outputScale, 0, 0]
-                        : null;
+                // const outputScale = window.devicePixelRatio || 1;
+                // const transform = outputScale !== 1
+                //         ? [outputScale, 0, 0, outputScale, 0, 0]
+                //         : null;
                 page.render({
                     canvasContext: canvas.getContext('2d'),
                     viewport: viewport,
-                    transform: transform,
+                    // transform: transform,
                 });
             })
         },
@@ -217,6 +218,7 @@ export default {
                     thumb.addEventListener('click', () => {
                         this.page = page
                     })
+                    
                     this.$refs['sidebar'].appendChild(thumb);
                     this.renderThumbnail(pdf, page, thumb)
                 }
