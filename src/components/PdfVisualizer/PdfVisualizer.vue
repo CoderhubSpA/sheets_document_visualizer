@@ -102,14 +102,6 @@ export default {
     },
     methods: {
         /**
-         * Permite hacer click en un thumbnail
-         * para ir a esa pagina 
-         * @param {Number} page 
-         */
-        fromThumbToPage(page) {
-            console.log(page)
-        },
-        /**
          * Desplaza el focus en el visor 
          * a la siguiente pagina
          */
@@ -222,7 +214,9 @@ export default {
 
                     const thumb = document.createElement('canvas')
                     thumb.className = 'pdf-thumbnail'
-                    // thumb.addEventListener('click', this.fromThumbToPage(page))
+                    thumb.addEventListener('click', () => {
+                        this.page = page
+                    })
                     this.$refs['sidebar'].appendChild(thumb);
                     this.renderThumbnail(pdf, page, thumb)
                 }

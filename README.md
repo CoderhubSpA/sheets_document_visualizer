@@ -47,6 +47,7 @@ mix.js()...
 [Fuente](https://laravel-mix.com/docs/6.0/legacy-node-polyfills)
 
 # TODO
+- Realizar test unitarios
 - Integracion de temas
 - Sobreescritura de metodos y propiedades de los componentes, de forma general e individual
 - Manejo de errores

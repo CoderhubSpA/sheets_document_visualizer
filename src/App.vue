@@ -1,5 +1,8 @@
 <template>
-  <document-visualizer src="http://localhost:8000/pdf"/>
+  <div>
+    <document-visualizer src="http://localhost:8000/pdf"/>
+  </div>
+  
 </template>
 
 <script>
