@@ -1,7 +1,7 @@
 .pdf-viewer {
     width: 100%;
     margin: auto;
-    position: absolute;
+    position: inherit;
 
     .pdf-toolbar {
         background-color: #6D757D;
@@ -11,7 +11,7 @@
         .pdf-toolbar-items {
             display: flex;
 
-            .center-options {
+            .left-options {
                 display: flex;
                 justify-content: left;
             }
@@ -90,12 +90,12 @@
     }
 }
 .pdf-sidebar-container {
-    margin: 8px -3px;
+    margin: 30px -3px;
     padding: 0;
     width: 0;
     background-color: rgba(157, 159, 161, 0.5);
     
-    position: fixed;
+    position: absolute;
     height: 90%;
     overflow-y: scroll;    
     flex-direction: column;
