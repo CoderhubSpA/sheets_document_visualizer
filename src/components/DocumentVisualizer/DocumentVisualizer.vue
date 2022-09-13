@@ -11,6 +11,8 @@ import LoadingDocument from '../LoadingDocument';
 import PdfVisualizer from '../PdfVisualizer';
 import TextVisualizer from '../TextVisualizer';
 import XlsxVisualizer from '../XlsxVisualizer';
+import CsvVisualizer from "@/components/CsvVisualizer/CsvVisualizer";
+import ErrorComponent from "@/components/ErrorComponent";
 
 export default {
     name: 'document-visualizer',
@@ -59,6 +61,12 @@ export default {
                 case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                     component = XlsxVisualizer; // () => import('../XlsxVisualizer');
                     break;
+              case 'application/csv':
+                component = CsvVisualizer;
+                  break;
+              case 'error':
+                  component = ErrorComponent;
+                  break;
                 default:
                     component = LoadingDocument; //() => import('../LoadingDocument');
                     break;
@@ -79,8 +87,7 @@ export default {
             this.blob = new Blob([response.data]);
         }).catch((error) => {
             this.format = 'error';
-            this.blob = new Blob([error.response.data]);
-            
+            this.blob = error.response;
         });
     }
 };

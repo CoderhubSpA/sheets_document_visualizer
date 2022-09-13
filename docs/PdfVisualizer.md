@@ -1,5 +1,13 @@
 # pdf-visualizer
 
+## Slots
+
+| Name      | Description                                                             |
+| --------- | ----------------------------------------------------------------------- |
+| `toolbar` | Toolbar: Muestra barra de herramientas para interaccion con el document |
+| `content` | Content: Zona de renderizado de todas las paginas del documento         |
+| `footer`  | Footer: Pie de pagina del documento. Por defecto esta en blanco         |
+
 ## Data
 
 | Name          | Type      | Description | Initial value |
@@ -19,17 +27,6 @@
 | `can_go_prev_page` | `binary` | **Dependencies:** `page`             |
 
 ## Methods
-
-### fromThumbToPage()
-
-Permite hacer click en un thumbnail
-para ir a esa pagina
-
-**Syntax**
-
-```typescript
-fromThumbToPage(page: Number): void
-```
 
 ### nextPage()
 

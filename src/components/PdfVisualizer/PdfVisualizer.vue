@@ -1,67 +1,75 @@
 <template>
     <div class="pdf-viewer">
-        <!-- Toolbar -->
+        <!-- Toolbar: Muestra barra de herramientas para interaccion con el document -->
+      <slot name="toolbar">
         <div class="pdf-toolbar">
-            <div class="pdf-toolbar-items">
+          <div class="pdf-toolbar-items">
 
-                <div class="left-options">
-                    <div class="pdf-toolbar-item" @click="showSideBar = !showSideBar">
-                        <i class="bi bi-list"></i>
-                    </div>
-                    <div class="pdf-sidebar-container" ref="sidebar" id="sidebar" :class="{'active': showSideBar }">
-                        <!-- THUMBNAILS -->
-                    </div>
-                </div>
-
-                <div class="center-options">
-                    <div class="pdf-toolbar-item" @click="nextPage" :class="{'disable' : !can_go_next_page }">
-                        <i class="bi bi-arrow-down-short"></i>
-                    </div>
-                    <div class="pdf-toolbar-item" @click="prevPage" :class="{'disable' : !can_go_prev_page }">
-                        <i class="bi bi-arrow-up-short"></i>
-                    </div>
-                    <div class="pdf-toolbar-item">
-                        <input type="number" class="go-to-page" min="1" v-model="page" />
-                    </div>
-                    <!-- Num. Pages -->
-                    <div class="pdf-toolbar-item">
-                        <span v-text="numPages"></span>
-                        <i class="bi bi-file-earmark-fill page-number"></i>
-                    </div>
-                    <!-- Zoom In -->
-                    <div class="pdf-toolbar-item" @click="zoomIn">
-                        <i class="bi bi-zoom-in"></i>
-                    </div>
-                    <!-- Zoom Out -->
-                    <div class="pdf-toolbar-item" @click="zoomOut">
-                        <i class="bi bi-zoom-out"></i>
-                    </div>
-                </div>
-                
-                <div class="right-options">
-                    <!-- Imprimir -->
-                    <div class="pdf-toolbar-item" @click="print">
-                        <i class="bi bi-printer-fill"></i>
-                    </div>
-                    <!-- Descargar -->
-                    <div class="pdf-toolbar-item" @click="download">
-                        <i class="bi bi-cloud-arrow-down-fill"></i>
-                    </div>
-                </div>
-                
+            <div class="left-options">
+              <div class="pdf-toolbar-item" @click="showSideBar = !showSideBar">
+                <i class="bi bi-list"></i>
+              </div>
+              <div class="pdf-sidebar-container" ref="sidebar" id="sidebar" :class="{'active': showSideBar }">
+                <!-- THUMBNAILS -->
+              </div>
             </div>
+
+            <div class="center-options">
+              <div class="pdf-toolbar-item" @click="nextPage" :class="{'disable' : !can_go_next_page }">
+                <i class="bi bi-arrow-down-short"></i>
+              </div>
+              <div class="pdf-toolbar-item" @click="prevPage" :class="{'disable' : !can_go_prev_page }">
+                <i class="bi bi-arrow-up-short"></i>
+              </div>
+              <div class="pdf-toolbar-item">
+                <input type="number" class="go-to-page" min="1" v-model="page" />
+              </div>
+              <!-- Num. Pages -->
+              <div class="pdf-toolbar-item">
+                <span v-text="numPages"></span>
+                <i class="bi bi-file-earmark-fill page-number"></i>
+              </div>
+              <!-- Zoom In -->
+              <div class="pdf-toolbar-item" @click="zoomIn">
+                <i class="bi bi-zoom-in"></i>
+              </div>
+              <!-- Zoom Out -->
+              <div class="pdf-toolbar-item" @click="zoomOut">
+                <i class="bi bi-zoom-out"></i>
+              </div>
+            </div>
+
+            <div class="right-options">
+              <!-- Imprimir -->
+              <div class="pdf-toolbar-item" @click="print">
+                <i class="bi bi-printer-fill"></i>
+              </div>
+              <!-- Descargar -->
+              <div class="pdf-toolbar-item" @click="download">
+                <i class="bi bi-cloud-arrow-down-fill"></i>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <!-- Paginas del documento -->
+      </slot>
+      <!-- Content: Zona de renderizado de todas las paginas del documento -->
+      <slot name="content">
         <div class="pdf-content" ref="pdf-content">
-            <!--  -->
+          <!--  -->
         </div>
+      </slot>
+      <!--   Footer: Pie de pagina del documento. Por defecto esta en blanco     -->
+      <slot name="footer">
+
+      </slot>
     </div>
 </template>
 <script>
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import PDFJSWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import CommonProps from '../CommonProps.vue';
-import printJS from 'print-js';
+import printJS from "print-js";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker;
 
@@ -77,9 +85,17 @@ export default {
         showSideBar: false
     }),
     computed: {
+      /**
+       * Permitir ir a la siguiente pagina, si esta existe
+       * @returns {boolean}
+       */
         can_go_next_page() {
             return (this.page + 1) <= this.numPages
         },
+      /**
+       * Permitir ir a la pagina anterior, si esta existe
+       * @returns {boolean}
+       */
         can_go_prev_page() {
             return 1 <= (this.page - 1);
         }
@@ -92,12 +108,13 @@ export default {
                 
             }
         },
+      /**
+       * Mostrar u ocultar el sidebar segun el estado
+       * de showSideBar
+       * @param val
+       */
         showSideBar(val) {
-            if (val) {
-                document.getElementById('sidebar').style.width = '150px';
-            } else {
-                document.getElementById('sidebar').style.width = '0px';
-            }
+          document.getElementById('sidebar').style.width = val ? '150px' : '0px';
         }
     },
     methods: {
@@ -226,6 +243,7 @@ export default {
         },
         /**
          * Descarga de documento PDF
+         * @return void
          */
         download() {
             const url  = URL.createObjectURL(this.blob);
@@ -237,6 +255,7 @@ export default {
         },
         /**
          * Imprimir document
+         * @return void
          */
         print() {
             printJS(URL.createObjectURL(this.blob))

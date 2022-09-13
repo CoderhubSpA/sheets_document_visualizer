@@ -1,20 +1,21 @@
 <template>
-  <div class="nested-form">
+  <!-- <div class="nested-form">
     <div class="header"></div>
-    <div class="content">
-      <document-visualizer src="http://localhost:8000/pdf"/>
-    </div>
-  </div>
+    <div class="content"> -->
+     <document-visualizer src="http://localhost:8000/pdf"/>
+    <!-- </div> -->
+  <!-- </div> -->
   
 </template>
 
 <script>
 import DocumentVisualizer from '@/components/DocumentVisualizer';
-
+// import DocxVisualizer from "@/components/DocxVisualizer";
 export default {
   name: 'App',
   components: {
-    DocumentVisualizer
+    DocumentVisualizer,
+    // DocxVisualizer
   }
 }
 </script>

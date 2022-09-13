@@ -1,7 +1,25 @@
-@import './variables';
+@import './__variables';
+@import './toolbar';
 @import './text.scss';
 @import './docx.scss';
 @import './loading.scss';
 @import './pdf.scss';
-// @import './pdf/index.scss';
-@import 'bootstrap-icons/font/bootstrap-icons.css'
+@import './excel.scss';
+@import "./csv.scss";
+@import "./error";
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+.highlight {
+  background-color: $highlight;
+}
+.match-text {
+  font-weight: 100;
+  font-size: 14px;
+  font-style: italic;
+  background-color: $background-match-text;
+  margin: 0px 10px;
+  color: white;
+  &:hover {
+    color: white;
+  }
+}

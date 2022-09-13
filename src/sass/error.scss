@@ -1,0 +1,31 @@
+.error-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .error-icon {
+    img {
+      max-width: 100px;
+    }
+  }
+
+  .error-message {
+    padding-left: 10px;
+    text-align: center;
+    .error-status-number {
+      text-align: center;
+      font-size: 30px;
+    }
+    .error-status-text {
+      font-style: italic;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .error-server-message {
+      font-style: oblique;
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+}
