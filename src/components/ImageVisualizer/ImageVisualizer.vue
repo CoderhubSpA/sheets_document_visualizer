@@ -1,6 +1,8 @@
 <template>
-  <div ref="image-viewer">
-    <img :src="img" alt="">
+  <div ref="image-viewer" class="image-viewer">
+    <div class="image-container">
+      <img :src="img" alt="">
+    </div>
   </div>
 </template>
 
@@ -37,7 +39,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
