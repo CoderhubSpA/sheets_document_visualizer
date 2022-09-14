@@ -50,7 +50,6 @@ mix.js()...
 - Realizar test unitarios
 - Integracion de temas
 - Sobreescritura de metodos y propiedades de los componentes, de forma general e individual
-- Manejo de errores
 - Flexibilizar el input de entrada (blob) 
 - Desarrollo de mas funcionalidades para el visor de pdf
     - Busqueda de texto

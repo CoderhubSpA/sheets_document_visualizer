@@ -13,6 +13,7 @@ import TextVisualizer from '../TextVisualizer';
 import XlsxVisualizer from '../XlsxVisualizer';
 import CsvVisualizer from "@/components/CsvVisualizer/CsvVisualizer";
 import ErrorComponent from "@/components/ErrorComponent";
+import ImageVisualizer from "@/components/ImageVisualizer";
 
 export default {
     name: 'document-visualizer',
@@ -67,9 +68,15 @@ export default {
               case 'error':
                   component = ErrorComponent;
                   break;
-                default:
-                    component = LoadingDocument; //() => import('../LoadingDocument');
-                    break;
+              case 'image/png':
+              case 'image/jpeg':
+              case 'image/gif':
+              case 'image/svg+xml':
+                  component = ImageVisualizer;
+                break;
+              default:
+                  component = LoadingDocument; //() => import('../LoadingDocument');
+                  break;
             }
             return component;
         },
@@ -84,6 +91,7 @@ export default {
             responseType: 'blob',
         }).then((response) => {
             this.format = response.data.type;
+            console.log(this.format)
             this.blob = new Blob([response.data]);
         }).catch((error) => {
             this.format = 'error';
