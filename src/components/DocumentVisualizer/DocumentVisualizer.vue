@@ -14,6 +14,9 @@ import XlsxVisualizer from '../XlsxVisualizer';
 import CsvVisualizer from "@/components/CsvVisualizer/CsvVisualizer";
 import ErrorComponent from "@/components/ErrorComponent";
 import ImageVisualizer from "@/components/ImageVisualizer";
+import UnsupportedFormat from "@/components/UnsupportedFormat/UnsupportedFormat";
+import {Formats} from "@/helpers/Formats";
+import PptxVisualizer from "@/components/PptxVisualizer";
 
 export default {
     name: 'document-visualizer',
@@ -62,6 +65,7 @@ export default {
                 case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
                     component = XlsxVisualizer; // () => import('../XlsxVisualizer');
                     break;
+              case 'text/csv':
               case 'application/csv':
                 component = CsvVisualizer;
                   break;
@@ -73,6 +77,15 @@ export default {
               case 'image/gif':
               case 'image/svg+xml':
                   component = ImageVisualizer;
+                break;
+              case 'application/vnd.ms-powerpoint':
+              case 'application/mspowerpoint':
+              case 'application/powerpoint':
+              case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                component = PptxVisualizer;
+                break;
+              case 'unsupported':
+                component = UnsupportedFormat;
                 break;
               default:
                   component = LoadingDocument; //() => import('../LoadingDocument');
@@ -90,10 +103,20 @@ export default {
         axios.get(this.src, {
             responseType: 'blob',
         }).then((response) => {
-            this.format = response.data.type;
-            console.log(this.format)
-            this.blob = new Blob([response.data]);
+          console.log(response.data)
+            if (Formats.isSupported(response.data.type)) {
+              this.format = response.data.type;
+              this.blob = new Blob([response.data]);
+            } else {
+              this.format = 'unsupported';
+              const data = {
+                src: this.src
+              }
+              this.blob =  new Blob([JSON.stringify(data)]);
+            }
+
         }).catch((error) => {
+          console.log(error)
             this.format = 'error';
             this.blob = error.response;
         });
