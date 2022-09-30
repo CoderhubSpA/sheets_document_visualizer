@@ -11,8 +11,12 @@ export default {
   name: "PptxVisualizer",
   mixins: [commonProps],
   methods: {
-    load() {
-      const file = new FileReader(this.blob);
+    async load() {
+      const data = await this.blob.text()
+      // const dom = new DOMParser.parseFromString(data)
+      const dom = new DOMParser()
+
+      console.log(dom.parseFromString(data))
     }
   }
 }
