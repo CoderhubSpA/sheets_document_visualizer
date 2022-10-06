@@ -10,10 +10,10 @@ export class Formats {
         'image/jpeg',
         'image/gif',
         'image/svg+xml',
-        'application/vnd.ms-powerpoint',
-        'application/mspowerpoint',
-        'application/powerpoint',
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        // 'application/vnd.ms-powerpoint',
+        // 'application/mspowerpoint',
+        // 'application/powerpoint',
+        // 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
     ]
 
     /**

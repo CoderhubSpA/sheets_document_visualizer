@@ -21,11 +21,11 @@
     "axios": "^0.27.2",
     "bootstrap-icons": "^1.9.1",
     "core-js": "^3.8.3",
-    "jspreadsheet-ce": "^4.11.1",
     "mammoth": "^1.4.21",
     "pdfjs-dist": "^2.15.349",
     "print-js": "^1.6.0",
-    "vue": "^2.6.14"
+    "vue": "^2.6.14",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
