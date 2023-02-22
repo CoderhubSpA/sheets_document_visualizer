@@ -43,7 +43,7 @@ export default {
     }),
     computed: {
         /**
-         * Importa el componente adecuado, para la visualizacion 
+         * Importa el componente adecuado, para la visualizacion
          * del file segun su formato
          * @return component
          */
@@ -93,6 +93,10 @@ export default {
             }
             return component;
         },
+        url() {
+          const resource = new URL(this.src);
+          return resource.origin + resource.pathname.replace('//', '/');
+        }
     },
     /**
      * Una vez creado el componente
@@ -100,7 +104,7 @@ export default {
      * indicado
      */
     async created() {
-        axios.get(this.src, {
+        axios.get(this.url, {
             responseType: 'blob',
         }).then((response) => {
           console.log(response.data)
