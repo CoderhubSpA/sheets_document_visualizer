@@ -250,7 +250,6 @@ export default {
 
           const parts  = this.dataEndpoint.split('/');
           const id = parts[parts.length -1];
-          console.log("🚀 ~ file: PdfVisualizer.vue:250 ~ download ~ response:", response)
           const row = response.data.content.entities_fk.document.find((el) => {
             return el.id === id;
           })
