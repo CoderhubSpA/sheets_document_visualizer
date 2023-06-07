@@ -2,10 +2,10 @@
   <!-- <div class="nested-form">
     <div class="header"></div>
     <div class="content"> -->
-     <document-visualizer src="http://localhost:8000/pdf"/>
+     <document-visualizer src="http://localhost:8888/document/5d0cf615-f52c-4fd9-aae7-bfa6397876c3"/>
     <!-- </div> -->
   <!-- </div> -->
-  
+
 </template>
 
 <script>

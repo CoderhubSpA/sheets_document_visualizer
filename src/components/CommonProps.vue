@@ -16,6 +16,10 @@ export default {
       require: true,
       default: '',
     },
+    dataEndpoint: {
+      type: String,
+      default: ''
+    }
   },
   mounted() {
     this.load()
