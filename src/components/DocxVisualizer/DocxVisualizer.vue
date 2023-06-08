@@ -37,7 +37,7 @@
 <script>
 import mammoth from 'mammoth/mammoth.browser';
 import CommonProps from '../CommonProps.vue';
-
+import axios from 'axios';
 export default {
   /**
    * Nombre del componente para ser usado de
