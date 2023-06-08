@@ -70,7 +70,7 @@ import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import PDFJSWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import CommonProps from '../CommonProps.vue';
 import printJS from "print-js";
-
+import axios from 'axios';
 pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker;
 
 export default {
@@ -105,7 +105,7 @@ export default {
             if (value > 0 && value <= this.numPages) {
                 const page = document.querySelector(`canvas[document-page="${value}"]`);
                 page.scrollIntoView();
-                
+
             }
         },
       /**
@@ -119,7 +119,7 @@ export default {
     },
     methods: {
         /**
-         * Desplaza el focus en el visor 
+         * Desplaza el focus en el visor
          * a la siguiente pagina
          */
         nextPage() {
@@ -147,7 +147,7 @@ export default {
                 // realiza la carga del documento con la nueva escala
                 this.load();
             }
-            
+
         },
         /**
          * Alejamiento del documento
@@ -178,7 +178,7 @@ export default {
          */
         renderPage(ctx, num, canvas) {
             ctx.getPage(num).then((page) => {
-                
+
                 const viewport = page.getViewport({scale: this.scale});
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
@@ -207,16 +207,16 @@ export default {
                 thumb.height = 96;
                 thumb.width = 80;
                 // const scale = Math.min(thumb.width / viewport.width, thumb.height / viewport.height);
-                
+
                 page.render({
                     canvasContext: thumb.getContext('2d'),
                     viewport: page.getViewport({scale: 0.126}),
-                    
+
                 })
             })
         },
         /**
-         * Procesa el documento e inicia el trabajo de 
+         * Procesa el documento e inicia el trabajo de
          * renderizado de las paginas
          */
         renderDocument() {
@@ -235,7 +235,7 @@ export default {
                     thumb.addEventListener('click', () => {
                         this.page = page
                     })
-                    
+
                     this.$refs['sidebar'].appendChild(thumb);
                     this.renderThumbnail(pdf, page, thumb)
                 }
@@ -245,13 +245,23 @@ export default {
          * Descarga de documento PDF
          * @return void
          */
-        download() {
-            const url  = URL.createObjectURL(this.blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'sheets.pdf';
-            link.click()
-            link.remove();
+        async download() {
+          const response  = await axios.get(this.dataEndpoint);
+
+          const parts  = this.dataEndpoint.split('/');
+          const id = parts[parts.length -1];
+          const row = response.data.content.entities_fk.document.find((el) => {
+            return el.id === id;
+          })
+
+          const name = row.name || 'sheets.pdf';
+
+          const objectURL  = URL.createObjectURL(this.blob);
+          const link = document.createElement('a');
+          link.href = objectURL;
+          link.download = name;
+          link.click()
+          link.remove();
         },
         /**
          * Imprimir document

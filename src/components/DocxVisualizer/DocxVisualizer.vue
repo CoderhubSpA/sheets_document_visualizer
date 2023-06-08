@@ -40,12 +40,12 @@ import CommonProps from '../CommonProps.vue';
 
 export default {
   /**
-   * Nombre del componente para ser usado de 
+   * Nombre del componente para ser usado de
    * forma individual
    */
   name: 'docx-visualizer',
   /**
-   * Insercion de props comunes entre todos los 
+   * Insercion de props comunes entre todos los
    * componente
    */
   mixins: [CommonProps],
@@ -81,14 +81,24 @@ export default {
      * Descarga de documento docx
      * @return void
      */
-    download() {
-      const url  = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'sheets.docx';
-      link.click()
-      link.remove();
-    },
+     async download() {
+          const response  = await axios.get(this.dataEndpoint);
+
+          const parts  = this.dataEndpoint.split('/');
+          const id = parts[parts.length -1];
+          const row = response.data.content.entities_fk.document.find((el) => {
+            return el.id === id;
+          })
+
+          const name = row.name || 'sheets.docx';
+
+          const objectURL  = URL.createObjectURL(this.blob);
+          const link = document.createElement('a');
+          link.href = objectURL;
+          link.download = name;
+          link.click()
+          link.remove();
+        },
     /**
      * Busqueda de texto en el contenido
      * y coloca las coincidencias dentro de un

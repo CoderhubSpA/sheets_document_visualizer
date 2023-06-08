@@ -1,6 +1,6 @@
 <template>
     <div>
-        <component :is="viewer" :blob="blob" :format="format" />
+        <component :is="viewer" :blob="blob" :format="format" :dataEndpoint="dataEndpoint"/>
     </div>
 </template>
 <script>
@@ -94,8 +94,10 @@ export default {
             return component;
         },
         url() {
-          const resource = new URL(this.src);
-          return resource.origin + resource.pathname.replace('//', '/');
+          return this.src;
+        },
+        dataEndpoint() {
+          return `/entity/data${this.src}`;
         }
     },
     /**
@@ -107,7 +109,6 @@ export default {
         axios.get(this.url, {
             responseType: 'blob',
         }).then((response) => {
-          console.log(response.data)
             if (Formats.isSupported(response.data.type)) {
               this.format = response.data.type;
               this.blob = new Blob([response.data]);
