@@ -55,7 +55,7 @@
 </template>
 <script>
 import * as XLSX from 'xlsx';
-
+import axios from 'axios';
 import CommonProps from '../CommonProps.vue';
 
 export default {
@@ -70,7 +70,12 @@ export default {
     dataSheet() {
       let data = [];
       if (this.workbook) {
-        data = XLSX.utils.sheet_to_row_object_array(this.workbook.Sheets[this.activeSheet]);
+        const content = XLSX.utils.sheet_to_row_object_array(this.workbook.Sheets[this.activeSheet]);
+        let header = {}
+        Object.keys(content[0]).map((key) => {
+          header[key] = key  
+        })
+        data = [header, ...content]
       }
       return data;
     },
@@ -90,13 +95,32 @@ export default {
     }
   },
   methods: {
-    download() {
-      const url  = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'sheets.xlsx';
-      link.click()
-      link.remove();
+    /**
+     * Realiza la descarga del documento con su respectivo nombre
+     */
+    async download() {
+      const response  = await axios.get(this.dataEndpoint);
+
+          const parts  = this.dataEndpoint.split('/');
+          const id = parts[parts.length -1];
+          const row = response.data.content.entities_fk.document.find((el) => {
+            return el.id === id;
+          })
+
+          const name = row.name || 'sheets.pdf';
+
+          const objectURL  = URL.createObjectURL(this.blob);
+          const link = document.createElement('a');
+          link.href = objectURL;
+          link.download = name;
+          link.click()
+          link.remove();
+      // const url  = URL.createObjectURL(this.blob);
+      // const link = document.createElement('a');
+      // link.href = url;
+      // link.download = 'sheets.xlsx';
+      // link.click()
+      // link.remove();
     },
     unifyRowLength(row) {
       let result = new Array(this.columns.length -1).fill('')
@@ -110,6 +134,7 @@ export default {
       return String.fromCharCode(code + num);
     },
     openSheet(sheetName) {
+      console.log(sheetName)
       this.activeSheet = sheetName
     },
     openCity(cityName) {
@@ -125,6 +150,7 @@ export default {
       reader.onload = (e) => {
         const data = e.target.result;
         this.workbook = XLSX.read(data, {type: 'binary'});
+        console.log(this.workbook)
         this.activeSheet = this.workbook.SheetNames[0]
         this.sheetsName = this.workbook.SheetNames;
       }
