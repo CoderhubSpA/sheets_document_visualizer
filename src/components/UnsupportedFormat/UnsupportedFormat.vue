@@ -27,7 +27,8 @@ export default {
       const raw = await this.blob.text();
       const data = JSON.parse(raw);
       this.src = data.src;
-    }
+    },
+    
   }
 }
 </script>

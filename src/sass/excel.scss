@@ -4,6 +4,7 @@
         height: 90vh;
         width: 100%;
         overflow-y: scroll;
+        overflow-x: scroll;
         background-color: #333333;
     }
 
@@ -63,8 +64,26 @@
             font-size: smaller;
             cursor: pointer;
         }
+
+        .sheet-name.active {
+            background-color: #c6c4c471;;
+            color: #e5e4e4ec;
+        }
         
     }
-
+    .loading {
+        width: 100%; 
+        height: 5px; 
+        background-color: blue;
+    }
+    .custom-loader {
+        width:15px;
+        height:15px;
+        border-radius:50%;
+        border:3px solid;
+        border-color:#fdfdfe #0000;
+        animation:s1 1s infinite;
+    }
+    @keyframes s1 {to{transform: rotate(.5turn)}}
     
 }

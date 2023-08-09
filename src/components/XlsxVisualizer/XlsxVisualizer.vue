@@ -16,16 +16,21 @@
               </div>
             </div>
             <div class="center-options">
-
+              <span v-if="showWarning">
+                Para visualizar todos los datos, recomendamos descargar el archivo
+              </span>
             </div>
             <div class="right-options">
+              <div class="toolbar-item" v-if="loading">
+                <div class="custom-loader"></div>
+              </div>
               <div class="toolbar-item" @click="download">
                 <i class="bi bi-cloud-arrow-down-fill"></i>
               </div>
             </div>
           </div>
         </div>
-      </slot>
+    </slot>
     <div class="xlsx-container">
       <table class="spreadsheet" ref="spreadsheet">
         <thead>
@@ -47,7 +52,7 @@
     </div>
     <!--  -->
     <div class="sheets-name">
-      <div class="sheet-name" v-for="(sn, key) in sheetsName" :key="key" @click="openSheet(sn)">
+      <div class="sheet-name" v-for="(sn, key) in sheetsName" :key="key" @click="openSheet(sn)" :class="{'active': activeSheet == sn}">
         {{ sn }}
       </div>
     </div>
@@ -57,20 +62,38 @@
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import CommonProps from '../CommonProps.vue';
-
+const MAX_ROW_PER_SHEET = 100;
 export default {
   name: 'xlsx-visualizer',
   mixins: [CommonProps],
   data: () => ({
     sheetsName: [],
     workbook: null,
-    activeSheet: ''
+    activeSheet: '',
+    loading: false,
   }),
   computed: {
+    showWarning() {
+      const len =  XLSX.utils.sheet_to_row_object_array(this.workbook?.Sheets[this.activeSheet]).length || 0
+      return len > MAX_ROW_PER_SHEET
+    },
     dataSheet() {
       let data = [];
       if (this.workbook) {
-        const content = XLSX.utils.sheet_to_row_object_array(this.workbook.Sheets[this.activeSheet]);
+        const sheet = this.workbook.Sheets[this.activeSheet]
+        const content = XLSX.utils.sheet_to_row_object_array(sheet).slice(0, MAX_ROW_PER_SHEET);
+        console.log(content)
+        // si posee una long 0 puede ser que tenga una sola fila
+        if (content.length < 2) {
+          // en tal caso habria que extraer la fila existente
+          let data = XLSX.utils.sheet_to_csv(sheet)
+          // row = data.split("\n")
+          // console.log(typeof(row), row.split("\n"))
+          const rows = data.split("\n").map((c) => {
+            return c.split(',')
+          })
+          return rows.length > 0 ? rows : ['','','']
+        }
         let header = {}
         Object.keys(content[0]).map((key) => {
           header[key] = key  
@@ -100,27 +123,18 @@ export default {
      */
     async download() {
       const response  = await axios.get(this.dataEndpoint);
+      const parts  = this.dataEndpoint.split('/');
+      const id = parts[parts.length -1];
+      const row = response.data.content.entities_fk.document.find((el) => {
+        return el.id === id;
+      })
 
-          const parts  = this.dataEndpoint.split('/');
-          const id = parts[parts.length -1];
-          const row = response.data.content.entities_fk.document.find((el) => {
-            return el.id === id;
-          })
-
-          const name = row.name || 'sheets.pdf';
-
-          const objectURL  = URL.createObjectURL(this.blob);
-          const link = document.createElement('a');
-          link.href = objectURL;
-          link.download = name;
-          link.click()
-          link.remove();
-      // const url  = URL.createObjectURL(this.blob);
-      // const link = document.createElement('a');
-      // link.href = url;
-      // link.download = 'sheets.xlsx';
-      // link.click()
-      // link.remove();
+      const objectURL  = URL.createObjectURL(this.blob);
+      const link = document.createElement('a');
+      link.href = objectURL;
+      link.download = row.name || 'sheets.xlsx';
+      link.click()
+      link.remove();
     },
     unifyRowLength(row) {
       let result = new Array(this.columns.length -1).fill('')
@@ -134,23 +148,13 @@ export default {
       return String.fromCharCode(code + num);
     },
     openSheet(sheetName) {
-      console.log(sheetName)
       this.activeSheet = sheetName
-    },
-    openCity(cityName) {
-      var i;
-      var x = document.getElementsByClassName("city");
-      for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
-      }
-      document.getElementById(cityName).style.display = "block";
     },
     load() {
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target.result;
         this.workbook = XLSX.read(data, {type: 'binary'});
-        console.log(this.workbook)
         this.activeSheet = this.workbook.SheetNames[0]
         this.sheetsName = this.workbook.SheetNames;
       }

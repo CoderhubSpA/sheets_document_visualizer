@@ -26,6 +26,13 @@
       font-style: oblique;
       font-size: 20px;
       font-weight: 600;
+
+      .link-download-file {
+        font-style: italic;
+        font-weight: 800;
+        color: blue;
+        cursor: help;
+      }
     }
   }
 }
