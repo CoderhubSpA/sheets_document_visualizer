@@ -16,11 +16,12 @@
               </div>
             </div>
             <div class="center-options">
-              <span v-if="showWarning">
-                Para visualizar todos los datos, recomendamos descargar el archivo
-              </span>
+              
             </div>
             <div class="right-options">
+              <div class="toolbar-item">
+                <!-- <button @click="getNumOfRows">#</button> -->
+              </div>
               <div class="toolbar-item" v-if="loading">
                 <div class="custom-loader"></div>
               </div>
@@ -31,24 +32,9 @@
           </div>
         </div>
     </slot>
-    <div class="xlsx-container">
-      <table class="spreadsheet" ref="spreadsheet">
-        <thead>
-          <td v-for="(column, i) in columns" :key="i" class="spreadsheet-column">
-            {{ column }}
-          </td>
-        </thead>
-        <tbody>
-          <tr v-for="(row, key) in dataSheet" :key="key">
-            <td class="spreadsheet-column">
-              {{ key + 1}}
-            </td>
-            <td v-for="(content, i) in unifyRowLength(row)" :key="i" class="spreadsheet-cell-value">
-              {{ content }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="xlsx-container" ref="xlsx-container" v-html="dataSheet">
+      
+      
     </div>
     <!--  -->
     <div class="sheets-name">
@@ -62,62 +48,97 @@
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import CommonProps from '../CommonProps.vue';
-const MAX_ROW_PER_SHEET = 100;
+import { DEFAULT_TABLE_BODY } from '../../helpers/Constants';
+
 export default {
   name: 'xlsx-visualizer',
   mixins: [CommonProps],
   data: () => ({
     sheetsName: [],
     workbook: null,
-    activeSheet: '',
+    activeSheet: null,
     loading: false,
+    dataSheet: DEFAULT_TABLE_BODY
   }),
-  computed: {
-    showWarning() {
-      const len =  XLSX.utils.sheet_to_row_object_array(this.workbook?.Sheets[this.activeSheet]).length || 0
-      return len > MAX_ROW_PER_SHEET
-    },
-    dataSheet() {
-      let data = [];
-      if (this.workbook) {
-        const sheet = this.workbook.Sheets[this.activeSheet]
-        const content = XLSX.utils.sheet_to_row_object_array(sheet).slice(0, MAX_ROW_PER_SHEET);
-        console.log(content)
-        // si posee una long 0 puede ser que tenga una sola fila
-        if (content.length < 2) {
-          // en tal caso habria que extraer la fila existente
-          let data = XLSX.utils.sheet_to_csv(sheet)
-          // row = data.split("\n")
-          // console.log(typeof(row), row.split("\n"))
-          const rows = data.split("\n").map((c) => {
-            return c.split(',')
-          })
-          return rows.length > 0 ? rows : ['','','']
+  watch: {
+    activeSheet(value) {
+      if (value) {
+        const sheet = this.workbook.Sheets[value];
+        const table = document.createElement('table');
+        let dataToRender = '';
+        if (Object.keys(sheet).length > 0) {
+          const HTML = XLSX.utils.sheet_to_html(sheet);
+          dataToRender = HTML.split('<table>')[1].split('</table>')[0].trim();
+          
+        } else {
+          dataToRender = DEFAULT_TABLE_BODY;
         }
-        let header = {}
-        Object.keys(content[0]).map((key) => {
-          header[key] = key  
-        })
-        data = [header, ...content]
+        table.innerHTML = dataToRender
+        // agregar las filas de indice
+        this.addIndexRowToTable(table);
+        // agregar las columnas
+        this.addColumnsHeaderToTable(table);
+        // renderizar tabla
+        this.renderTable(table);
       }
-      return data;
-    },
-    columns() {
-      // 
-      const columns = [''];
-      let max = 0;
-      this.dataSheet.forEach((row) => {
-        const columns_per_row = Object.keys(row).length
-        if ( columns_per_row > max)
-          max = columns_per_row;
-      });
-      for (let index = 0; index <= max + 3; index++) {
-        columns.push(this.intToChar(index));
-      }
-      return columns;
     }
   },
   methods: {
+    /**
+     * Dada una tabla agrega la columna asignada 
+     * a los numeros de las filas
+     * @param {HTMLTableElement} table 
+     */
+    addIndexRowToTable(table) {
+      for (let index = 0; index < table.rows.length; index++) {
+        const element = table.rows[index];
+        const indexColumn = document.createElement('td');
+        indexColumn.classList.add('index-column');
+        indexColumn.innerHTML = index + 1
+        element.insertBefore(indexColumn, element.firstChild)
+      }
+    },
+    /**
+     * Dada una tabla determina cuantas cols
+     * deberian existir
+     * @param {HTMLTableElement} table 
+     */
+    addColumnsHeaderToTable(table) {
+      const rows = table.getElementsByTagName('tr');
+      // debe asignar 
+      const numCols = [1];
+      for (const row in Array.from(rows)) {
+        // debe existir al menos 1 columna
+        let acc = 1;
+        const cols = rows[row].getElementsByTagName('td')
+        // la fila en la posicion actual contiene N columnas
+        // considerar que el colSpan por defecto siempre es 1
+        numCols.push(Array.from(cols).reduce((acc, cell) => acc + cell.colSpan, acc))
+      }
+      // numero de columnas a generar
+      const colsToGenerate = Math.max.apply(null, numCols)
+      const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+      const alphabet = alpha.map((x) => String.fromCharCode(x));
+      
+      const columnsId = this.generarArrayEncabezado(alphabet, colsToGenerate);
+      columnsId.unshift('');
+
+      const header = table.createTHead();
+      const row = header.insertRow(0);
+      columnsId.forEach((id, index) => {
+        const cell = row.insertCell(index)
+        cell.innerHTML = id;
+      });
+    },
+    /**
+     * Transforma la tabla en un string
+     * para ser renderizada mendiante la directiva
+     * v-html
+     * @param {*} table 
+     */
+    renderTable(table) {
+      this.dataSheet = table.outerHTML;
+    },
     /**
      * Realiza la descarga del documento con su respectivo nombre
      */
@@ -136,31 +157,52 @@ export default {
       link.click()
       link.remove();
     },
-    unifyRowLength(row) {
-      let result = new Array(this.columns.length -1).fill('')
-      Object.keys(row).forEach((key, index) => {
-        result[index] = row[key]
-      });
-      return result;
-    },
-    intToChar(num) {
-      const code = 'A'.charCodeAt(0);
-      return String.fromCharCode(code + num);
-    },
+    /**
+     * Cambia la hoja a visualizar
+     * @param {string} sheetName 
+     */
     openSheet(sheetName) {
       this.activeSheet = sheetName
     },
+    /**
+     * Carga del documento desde un blob
+     */
     load() {
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target.result;
         this.workbook = XLSX.read(data, {type: 'binary'});
-        this.activeSheet = this.workbook.SheetNames[0]
         this.sheetsName = this.workbook.SheetNames;
+        this.activeSheet = this.workbook.SheetNames[0]
       }
       reader.readAsBinaryString(this.blob);
-
     },
+    generarArrayEncabezado(letras, cantidadColumnas) {
+      // Inicializa el array
+      const arrayEncabezado = [];
+
+      // Agrega las letras del alfabeto
+      for (let letra of letras) {
+        arrayEncabezado.push(letra);
+      }
+
+      // Agrega las combinaciones de letras
+      for (let i = 0; i < cantidadColumnas; i++) {
+        // Obtiene la letra actual
+        const letraActual = arrayEncabezado[i];
+
+        // Agrega la combinación de letras
+        for (let j = 0; j < letras.length; j++) {
+          arrayEncabezado.push(`${letraActual}${letras[j]}`);
+        }
+
+        if (arrayEncabezado.length > cantidadColumnas -2) {
+          break;
+        }
+      }
+
+      return arrayEncabezado.slice(0, cantidadColumnas - 2);
+    }
   },
 };
 </script>
