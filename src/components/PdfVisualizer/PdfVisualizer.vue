@@ -101,13 +101,6 @@ export default {
         }
     },
     watch: {
-        page(value) {
-            if (value > 0 && value <= this.numPages) {
-                const page = document.querySelector(`canvas[document-page="${value}"]`);
-                page.scrollIntoView();
-
-            }
-        },
       /**
        * Mostrar u ocultar el sidebar segun el estado
        * de showSideBar
@@ -118,6 +111,10 @@ export default {
         }
     },
     methods: {
+      setPage(p) {
+        const page = document.querySelector(`canvas[document-page="${p}"]`);
+        page.scrollIntoView();
+      },
         /**
          * Desplaza el focus en el visor
          * a la siguiente pagina
@@ -125,6 +122,7 @@ export default {
         nextPage() {
             if (this.page + 1 <= this.numPages) {
                 this.page++;
+                this.setPage(this.page);
             }
         },
         /**
@@ -132,8 +130,9 @@ export default {
          * a la pagina anterior
          */
         prevPage() {
-            if (1 >= this.page - 1) {
-                this.page--;
+            if (1 <= this.page - 1) {
+              this.page--;
+              this.setPage(this.page);
             }
         },
         /**
@@ -222,11 +221,14 @@ export default {
         renderDocument() {
             this.pdf.promise.then((pdf) => {
                 // obtiene el numero de paginas del documento
+                const io = this.intersectionObserver();
                 this.numPages = pdf.numPages;
                 for (let page = 1; page <= pdf.numPages; page++) {
                     const canvas = document.createElement('canvas');
                     canvas.className = 'pdf-page';
+                    canvas.setAttribute('id', `page-${page}`);
                     canvas.setAttribute('document-page', page)
+                    io.observe(canvas)
                     this.$refs['pdf-content'].appendChild(canvas);
                     this.renderPage(pdf, page, canvas);
 
@@ -268,7 +270,23 @@ export default {
          * @return void
          */
         print() {
-            printJS(URL.createObjectURL(this.blob))
+          printJS(URL.createObjectURL(this.blob))
+        },
+        intersectionObserver() {
+          const options = {
+            root: this.$refs['pdf-content'],
+            rootMargin: "0px",
+            thresholds: [0.7],
+          };
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const num = entry.target.id.split('-')[1];
+                this.page = Number(num);
+              }
+            }, options);
+          });
+          return io;
         }
     }
 };
