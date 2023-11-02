@@ -82,7 +82,7 @@ export default {
         thumbnails: [],
         scale: 1,
         page: 1,
-        showSideBar: false
+        showSideBar: true
     }),
     computed: {
       /**

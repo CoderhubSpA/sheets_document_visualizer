@@ -92,7 +92,7 @@
 .pdf-sidebar-container {
     margin: 30px -3px;
     padding: 0;
-    width: 0;
+    width: 150px;
     background-color: rgba(157, 159, 161, 0.5);
     
     position: absolute;
@@ -114,6 +114,7 @@
     }
 
     .pdf-thumbnail.active {
-        border: 1px solid red;
+        box-shadow: rgba(40, 39, 39, 0.35) 0px 5px 24px;
+        border: 2px solid rgb(5 125 81 / 35%);
     }
 }
