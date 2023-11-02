@@ -22,7 +22,7 @@
                 <i class="bi bi-arrow-up-short"></i>
               </div>
               <div class="pdf-toolbar-item">
-                <input type="number" class="go-to-page" min="1" v-model="page" />
+                <input type="number" class="go-to-page" min="1" :value="page" @keyup="changePage"/>
               </div>
               <!-- Num. Pages -->
               <div class="pdf-toolbar-item">
@@ -101,6 +101,14 @@ export default {
         }
     },
     watch: {
+      page(newest, oldest){
+        const oldThumb = document.getElementById(`thumb-page-${oldest}`);
+        const activeClass = ['active'];
+        oldThumb.classList.remove(activeClass);
+        const newThumb = document.getElementById(`thumb-page-${newest}`);
+        newThumb.classList.add(activeClass);
+        newThumb.scrollIntoView();
+      },
       /**
        * Mostrar u ocultar el sidebar segun el estado
        * de showSideBar
@@ -234,13 +242,18 @@ export default {
 
                     const thumb = document.createElement('canvas')
                     thumb.className = 'pdf-thumbnail'
+                    const thumbId = `thumb-page-${page}`;
+                    thumb.setAttribute('id', thumbId)
+                    thumb.setAttribute('ref', thumbId)
                     thumb.addEventListener('click', () => {
-                        this.page = page
+                        this.setPage(page)
                     })
 
                     this.$refs['sidebar'].appendChild(thumb);
                     this.renderThumbnail(pdf, page, thumb)
                 }
+                const fThumb = document.getElementById(`thumb-page-1`);
+                fThumb.classList.add(['active'])
             });
         },
         /**
@@ -272,6 +285,12 @@ export default {
         print() {
           printJS(URL.createObjectURL(this.blob))
         },
+        /**
+         * Provee una vía asíncrona para observar cambios en la intersección 
+         * de un elemento con un elemento ancestro o con el viewport del 
+         * documento de nivel superior.
+         * @retrun { IntersectionObserver } 
+         */
         intersectionObserver() {
           const options = {
             root: this.$refs['pdf-content'],
@@ -287,6 +306,16 @@ export default {
             }, options);
           });
           return io;
+        },
+        changePage(e) {
+          const { key } = e;
+          if (!Number.isNaN(key)) {
+            const { value } = e.target;
+            const num = Number(value);
+            if ((num >= 1 && num <= this.numPages) && num) {
+              this.setPage(num);
+            }
+          }
         }
     }
 };

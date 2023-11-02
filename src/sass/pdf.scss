@@ -112,4 +112,8 @@
         display: block;
         cursor: pointer;
     }
+
+    .pdf-thumbnail.active {
+        border: 1px solid red;
+    }
 }
