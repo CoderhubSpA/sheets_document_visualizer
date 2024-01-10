@@ -21,7 +21,7 @@
     "axios": "^0.27.2",
     "bootstrap-icons": "^1.9.1",
     "core-js": "^3.8.3",
-    "mammoth": "^1.4.21",
+    "mammoth": "^1.6.0",
     "pdfjs-dist": "^2.15.349",
     "print-js": "^1.6.0",
     "sass": "^1.62.1",

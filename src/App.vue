@@ -15,7 +15,7 @@ export default {
     // DocxVisualizer
   },
   data: () => ({
-    file: '',
+    file: 'http://127.0.0.1:8000',
   }),
   methods: {
     onChange(event) {
