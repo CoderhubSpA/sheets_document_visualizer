@@ -93,11 +93,19 @@ export default {
             }
             return component;
         },
+        /**
+         * Determina si la fuente entregada es de tipo String
+         * o no
+         * @return {String|null}
+         */
         url() {
           return this.src instanceof String ? this.src : null;
         },
+        /**
+         * Construye el endpoint para la descarga del archivo
+         */
         dataEndpoint() {
-          return `/entity/data${this.src}`;
+          return this.url ? `/entity/data${this.src}` : null;
         }
     },
     watch: {
@@ -111,19 +119,29 @@ export default {
      * indicado
      */
     async created() {
-      this.readSrc(this.src)
+      this.readSrc()
     },
     methods: {
-      readSrc(src) {
-        console.log(src)
+      /**
+       * Si el visualizador posee una URL
+       * realiza un llamado al backend
+       * o lee desde un archivo cargado desde un input
+       * @return {Void}
+       */
+      readSrc() {
         if (this.url) {
           this.readFromURL()
         } else {
           this.readFromFile()
         }
       },
+      /**
+       * Realiza un llamado al backend
+       * esperando que el tipo de respuesta sea manejada
+       * como un blob
+       * @return {Void}
+       */
       readFromURL() {
-        console.log(this.url)
         axios.get(this.url, {
             responseType: 'blob',
         }).then((response) => {
@@ -144,6 +162,12 @@ export default {
             this.blob = error.response;
         });
       },
+      /**
+       * Cuando el input del visualizador
+       * es un Archivo no cargado a la plataforma
+       * recibe un {File} y este se encarga de transformarlo como blob
+       * @return {Void}
+       */
       readFromFile() {
         this.format = this.src.type;
         this.blob = new Blob([this.src], {type: this.format});
