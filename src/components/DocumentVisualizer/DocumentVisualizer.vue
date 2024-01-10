@@ -25,7 +25,7 @@ export default {
          * URL del file a visualizar
          */
         src: {
-            type: String,
+            type: [String, Blob],
             required: true,
         },
     },
@@ -94,11 +94,16 @@ export default {
             return component;
         },
         url() {
-          return this.src;
+          return this.src instanceof String ? this.src : null;
         },
         dataEndpoint() {
           return `/entity/data${this.src}`;
         }
+    },
+    watch: {
+      src(value) {
+        this.readSrc(value)
+      }
     },
     /**
      * Una vez creado el componente
@@ -106,6 +111,19 @@ export default {
      * indicado
      */
     async created() {
+      this.readSrc(this.src)
+    },
+    methods: {
+      readSrc(src) {
+        console.log(src)
+        if (this.url) {
+          this.readFromURL()
+        } else {
+          this.readFromFile()
+        }
+      },
+      readFromURL() {
+        console.log(this.url)
         axios.get(this.url, {
             responseType: 'blob',
         }).then((response) => {
@@ -125,7 +143,12 @@ export default {
             this.format = 'error';
             this.blob = error.response;
         });
-    }
+      },
+      readFromFile() {
+        this.format = this.src.type;
+        this.blob = new Blob([this.src], {type: this.format});
+      }
+    },
 };
 </script>
 <style lang="scss">

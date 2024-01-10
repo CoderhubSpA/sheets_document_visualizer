@@ -1,11 +1,8 @@
 <template>
-  <!-- <div class="nested-form">
-    <div class="header"></div>
-    <div class="content"> -->
-     <document-visualizer src="http://localhost:8000/file"/>
-    <!-- </div> -->
-  <!-- </div> -->
-
+  <div>
+    <input type="file" name="file" id="file" @change="onChange">
+    <document-visualizer :src="file"/>
+  </div>
 </template>
 
 <script>
@@ -16,6 +13,15 @@ export default {
   components: {
     DocumentVisualizer,
     // DocxVisualizer
+  },
+  data: () => ({
+    file: '',
+  }),
+  methods: {
+    onChange(event) {
+      // const file = event.target.files[0];
+      this.file = event.target.files[0];
+    },
   }
 }
 </script>
