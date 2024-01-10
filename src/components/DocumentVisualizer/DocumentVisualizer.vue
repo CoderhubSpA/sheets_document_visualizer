@@ -130,7 +130,6 @@ export default {
      * @return {Void}
      */
     readSrc() {
-      console.log(this.src)
       if (this.url) {
         this.readFromURL()
       } else {
