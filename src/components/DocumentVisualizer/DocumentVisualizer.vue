@@ -119,7 +119,7 @@ export default {
    * procede a realizar la solicitud al endpoint
    * indicado
    */
-  async created() {
+  async mounted() {
     this.readSrc()
   },
   methods: {
