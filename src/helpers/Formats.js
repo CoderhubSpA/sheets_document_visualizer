@@ -27,4 +27,10 @@ export class Formats {
     static isSupported(format) {
         return this.formats.includes(format);
     }
+
+    static imports = {
+        'text/plain': 'TextVisualizer',
+        'text/csv': 'TextVisualizer',
+        'application/csv': 'TextVisualizer',
+    }
 }
