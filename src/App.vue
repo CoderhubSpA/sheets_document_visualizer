@@ -1,6 +1,9 @@
 <template>
   <div>
+    {{ file }}
+    <hr>
     <input type="file" name="file" id="file" @change="onChange">
+    
     <document-visualizer :src="file"/>
   </div>
 </template>
@@ -15,7 +18,7 @@ export default {
     // DocxVisualizer
   },
   data: () => ({
-    file: 'http://127.0.0.1:8000',
+    file: 'http://127.0.0.1:8000/file',
   }),
   methods: {
     onChange(event) {

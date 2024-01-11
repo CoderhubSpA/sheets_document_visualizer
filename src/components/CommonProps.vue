@@ -16,6 +16,10 @@ export default {
       require: true,
       default: '',
     },
+    canDownloadFile: {
+      type: Boolean,
+      default: true,
+    },
     dataEndpoint: {
       type: String,
       default: ''
