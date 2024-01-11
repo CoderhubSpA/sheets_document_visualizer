@@ -1,106 +1,43 @@
 <template>
-  <div class="pdf-viewer">
-    <!-- Toolbar: Muestra barra de herramientas para interaccion con el document -->
-    <slot name="toolbar">
-      <div class="pdf-toolbar">
-        <div class="pdf-toolbar-items">
-
-          <div class="left-options">
-           
-          </div>
-
-          <div class="center-options">
-            <!-- <div class="pdf-toolbar-item" @click="nextPage" :class="{ 'disable': !can_go_next_page }">
-              <i class="bi bi-arrow-down-short"></i>
-            </div>
-            <div class="pdf-toolbar-item" @click="prevPage" :class="{ 'disable': !can_go_prev_page }">
-              <i class="bi bi-arrow-up-short"></i>
-            </div> -->
-            <div class="pdf-toolbar-item">
-              <input type="number" class="go-to-page" min="1" v-model="section" />
-            </div>
-            <!-- Num. Pages -->
-            <div class="pdf-toolbar-item">
-              <span v-text="numOfSections"></span>
-              <i class="bi bi-file-earmark-fill page-number"></i>
-            </div>
-          </div>
-
-          <div class="right-options">
-            <!-- Imprimir -->
-            <div class="pdf-toolbar-item" @click="print">
-              <i class="bi bi-printer-fill"></i>
-            </div>
-            <!-- Descargar -->
-            <div class="pdf-toolbar-item" @click="download">
-              <i class="bi bi-cloud-arrow-down-fill"></i>
-            </div>
-          </div>
-
+  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
+    <template #left>
+      <!-- <div class="toolbar-item">
+        <i class="bi bi-search" @click="showSearch = !showSearch"></i>
+        <div class="toolbar-item-option" v-if="showSearch">
+          <input type="text" name="search" id="search" placeholder="Buscar..." v-model="search">
+          <span class="match-text" v-text="match_text"></span>
         </div>
+      </div> -->
+    </template>
+    <template #center>
+      <div class="toolbar-item" @click="nextSection">
+        <i class="bi bi-arrow-down-short"></i>
       </div>
-    </slot>
-    <!-- Content: Zona de renderizado de todas las paginas del documento -->
-    <slot name="content">
-      <div ref="docx-viewer" id="docx-content" v-html="result"></div>
-    </slot>
-    <!--   Footer: Pie de pagina del documento. Por defecto esta en blanco     -->
-    <slot name="footer">
-
-    </slot>
-  </div>
-  <!-- <div class="docx-container">
-    <slot name="toolbar">
-      <div class="toolbar">
-        <div class="toolbar-items">
-          <div class="left-options">
-            <div class="toolbar-item">
-              <i class="bi bi-search" @click="showSearch = !showSearch"></i>
-              <div class="toolbar-item-option" v-if="showSearch">
-                <input type="text" name="search" id="search" placeholder="Buscar..." v-model="search">
-                <span class="match-text">
-                  {{ match_text }}
-                </span>
-                <i class="bi bi-x" @click="showSearch = false"></i>
-              </div>
-            </div>
-          </div>
-          <div class="center-options" style="padding-top: 4px">
-            <div class="pdf-toolbar-item" @click="nextPage" :class="{ 'disable': !can_go_next_page }">
-              <i class="bi bi-arrow-down-short"></i>
-            </div>
-            <div class="pdf-toolbar-item" @click="prevPage" :class="{ 'disable': !can_go_prev_page }">
-              <i class="bi bi-arrow-up-short"></i>
-            </div>
-            <div class="pdf-toolbar-item">
-              <input type="number" class="go-to-page" min="1" v-model="section" />
-            </div>
-            <div class="pdf-toolbar-item" style="margin-left: 4px;">
-              <span v-text="numOfSections"></span>
-              <i class="bi bi-file-earmark-fill page-number"></i>
-            </div>
-          </div>
-          <div class="right-options">
-            <div class="toolbar-item" @click="download">
-              <i class="bi bi-cloud-arrow-down-fill"></i>
-            </div>
-          </div>
-        </div>
+      <div class="toolbar-item" @click="prevSection">
+        <i class="bi bi-arrow-up-short"></i>
       </div>
-    </slot>
-    <slot name="content">
-      <div ref="docx-viewer" id="docx-content" v-html="result"></div>
-    </slot>
-    <slot name="footer">
-
-    </slot>
-  </div> -->
+      <div class="toolbar-item">
+        <input type="number" class="go-to-page" min="1" :value="section" @keyup="changePage" />
+      </div>
+      <div class="toolbar-item">
+        <span v-text="numSections"></span>
+        <i class="bi bi-file-earmark-fill page-number"></i>
+      </div>
+    </template>
+    <div class="document-content">
+      <div ref="docx-viewer" id="docx-content" v-html="result" />
+    </div>
+  </layout-visualizer>
 </template>
 <script>
-import { renderAsync } from 'docx-preview';
+import Visualizer from '../Layout/Visualizer.vue';
+import { renderAsync } from 'docx-preview'
 import CommonProps from '../CommonProps.vue';
 import axios from 'axios';
 export default {
+  components: {
+    'layout-visualizer': Visualizer,
+  },
   /**
    * Nombre del componente para ser usado de
    * forma individual
@@ -120,18 +57,25 @@ export default {
     docx: '',
     // informacion despues de realizar una busqueda
     result: '',
-    // secciones del documento (pag)
-    sections: [],
-    section: 1,
+    numSections: 0,
+    section: 1
   }),
   computed: {
     /**
-     * Calcula la cantidad de seciones (pag)
-     * detectadas en el documento
-     * @return {Number}
+     * Calcula todas las coincidencias de busquedas
+     * y muestra la cantidad
+     * @returns {string}
      */
-    numOfSections() {
-      return this.sections.length;
+    match_text() {
+      let text = '';
+      // const matches = this.$.querySelector('span.highlight');
+      const matches = this.result.split(' ').filter((w) => {
+        return w.includes('<span')
+      });
+      if (matches) {
+        text = `${matches.length} match`;
+      }
+      return text;
     }
   },
   watch: {
@@ -140,22 +84,47 @@ export default {
     }
   },
   methods: {
+    nextSection() {
+      if (this.section + 1 <= this.numSections) {
+        this.section++;
+        this.setSection(this.section)
+      }
+    },
+    prevSection() {
+      if (1 <= this.section - 1) {
+        this.section--;
+        this.setSection(this.section);
+      }
+    },
+    changePage(e) {
+      const { key } = e;
+      if (!Number.isNaN(key)) {
+        const { value } = e.target;
+        const num = Number(value);
+        if ((num >= 1 && num <= this.numSections) && num) {
+          this.setSection(num);
+        }
+      }
+    },
+    setSection(s) {
+      const sections = document.querySelectorAll('section');
+      const section = sections[s - 1];
+      section.scrollIntoView();
+    },
     /**
      * Convierte el Un Blob de un documento .docx
      * en HTML para ser visualizado en el componente
      * @return Void
      */
     load() {
-      const content = document.getElementById('docx-content')
+      const docContainer = document.getElementById('docx-content')
       const options = {
-        ignoreLastRenderedPageBreak: false,
-        //if true, images, fonts, etc. will be converted to base 64 URL, otherwise URL.createObjectURL is used
-        useBase64URL: true
-      }
-      renderAsync(this.blob, content, null, options)
+        // inWrapper: false
+      };
+      renderAsync(this.blob, docContainer, null, options)
         .then(() => {
-          // obtiene todas las secciones encontradas
-          this.sections = content.querySelectorAll('section');
+          const sections = docContainer.querySelectorAll('section');
+          this.numSections = sections.length;
         })
     },
     /**
@@ -189,9 +158,12 @@ export default {
      */
     searchInContent(search) {
       if (search) {
-        this.result = this.docx.replaceAll(search, `<span class="highlight">${search}</span>`);
-      } else {
-        this.result = this.docx;
+
+        const sections = document.querySelectorAll('div.docx-wrapper > section');
+        sections.forEach(s => {
+          console.log(s.innerHTML)
+          s.innerHTML.replaceAll(search, `<span class="highlight">${search}</span>`)
+        });
       }
     }
   }

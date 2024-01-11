@@ -1,10 +1,10 @@
 <template>
   <div>
-    <component :is="viewer" :blob="blob" :format="format" :dataEndpoint="dataEndpoint" />
+    <component :is="viewer" :blob="blob" :format="format" :canDownloadFile="canDownloadFile"/>
   </div>
 </template>
 <script>
-
+import LayoutVisualizer from '../Layout/Visualizer';
 import axios from 'axios';
 import DocxVisualizer from '../DocxVisualizer';
 import LoadingDocument from '../LoadingDocument';
@@ -19,6 +19,9 @@ import { Formats } from "@/helpers/Formats";
 import PptxVisualizer from "@/components/PptxVisualizer";
 
 export default {
+  components: {
+    LayoutVisualizer,
+  },
   name: 'document-visualizer',
   props: {
     /**
@@ -43,6 +46,22 @@ export default {
     blob: null
   }),
   computed: {
+    /**
+     * Determina si el archivo en visualizacion 
+     * es descargable o no
+     * @return {Boolean}
+     */
+     canDownloadFile() {
+      return typeof (this.src) === 'string' ? true : false;
+    },
+    /**
+     * Determina si la fuente 
+     * entregada es de tipo String o File
+     * @return {String}
+     */
+    type_of_src() {
+      return typeof (this.src);
+    },
     /**
      * Importa el componente adecuado, para la visualizacion
      * del file segun su formato
@@ -77,6 +96,8 @@ export default {
         case 'image/jpeg':
         case 'image/gif':
         case 'image/svg+xml':
+        case 'image/webp':
+        // case 'image/tiff':
           component = ImageVisualizer;
           break;
         case 'application/vnd.ms-powerpoint':
@@ -106,12 +127,12 @@ export default {
      * Construye el endpoint para la descarga del archivo
      */
     dataEndpoint() {
-      return this.url ? `/entity/data${this.src}` : null;
+      return this.type_of_src === 'string' ? `/entity/data${this.src}` : null;
     }
   },
   watch: {
-    src(value) {
-      this.readSrc(value)
+    src() {
+      this.readSrc()
     }
   },
   /**
@@ -119,10 +140,33 @@ export default {
    * procede a realizar la solicitud al endpoint
    * indicado
    */
-  async created() {
+  async mounted() {
     this.readSrc()
   },
   methods: {
+    /**
+     * Realiza la descarga del archivo
+     * @return {Void}
+     */
+    async download() {
+      const response = await axios.get(this.dataEndpoint);
+
+      const parts = this.dataEndpoint.split('/');
+      const id = parts[parts.length - 1];
+
+      const row = response.data.content.entities_fk.document.find((el) => {
+        return el.id === id;
+      });
+
+      const name = row.name;
+
+      const objectURL = URL.createObjectURL(this.blob);
+      const link = document.createElement('a');
+      link.href = objectURL;
+      link.download = name;
+      link.click()
+      link.remove();
+    },
     /**
      * Si el visualizador posee una URL
      * realiza un llamado al backend
@@ -130,7 +174,7 @@ export default {
      * @return {Void}
      */
     readSrc() {
-      if (this.url) {
+      if (this.type_of_src == 'string') {
         this.readFromURL()
       } else {
         this.readFromFile()
@@ -143,12 +187,13 @@ export default {
      * @return {Void}
      */
     readFromURL() {
-      axios.get(this.url, {
+      axios.get(this.src, {
         responseType: 'blob',
       }).then((response) => {
+        console.log(response.data.type)
         if (Formats.isSupported(response.data.type)) {
           this.format = response.data.type;
-          this.blob = new Blob([response.data]);
+          this.blob = new Blob([response.data], { type: this.format });
         } else {
           this.format = 'unsupported';
           const data = {

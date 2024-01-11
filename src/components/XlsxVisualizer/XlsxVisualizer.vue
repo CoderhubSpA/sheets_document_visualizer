@@ -1,56 +1,25 @@
 <template>
-  <div id="xlsx-visualizer">
-    <slot name="toolbar">
-        <div class="toolbar">
-          <div class="toolbar-items">
-            <div class="left-options">
-              <div class="toolbar-item">
-                <!-- <i class="bi bi-search" @click="showSearch = !showSearch"></i> -->
-                <!-- <div class="toolbar-item-option" v-if="showSearch"> -->
-                  <!-- <input type="text" name="search" id="search" placeholder="Buscar..." v-model="search">
-                  <span class="match-text">
-                    {{ match_text }}
-                  </span> -->
-                  <!-- <i class="bi bi-x" @click="showSearch = false"></i> -->
-                <!-- </div> -->
-              </div>
-            </div>
-            <div class="center-options">
-              
-            </div>
-            <div class="right-options">
-              <div class="toolbar-item">
-                <!-- <button @click="getNumOfRows">#</button> -->
-              </div>
-              <div class="toolbar-item" v-if="loading">
-                <div class="custom-loader"></div>
-              </div>
-              <div class="toolbar-item" @click="download">
-                <i class="bi bi-cloud-arrow-down-fill"></i>
-              </div>
-            </div>
-          </div>
+   <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
+    <div class="xlsx-visualizer">
+      <div class="xlsx-container" ref="xlsx-container" v-html="dataSheet" />
+      <div class="sheets-name">
+        <div class="sheet-name" v-for="(sn, key) in sheetsName" :key="key" @click="openSheet(sn)" :class="{'active': activeSheet == sn}">
+          {{ sn }}
         </div>
-    </slot>
-    <div class="xlsx-container" ref="xlsx-container" v-html="dataSheet">
-      
-      
-    </div>
-    <!--  -->
-    <div class="sheets-name">
-      <div class="sheet-name" v-for="(sn, key) in sheetsName" :key="key" @click="openSheet(sn)" :class="{'active': activeSheet == sn}">
-        {{ sn }}
       </div>
     </div>
-  </div>
+  </layout-visualizer>
 </template>
 <script>
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import CommonProps from '../CommonProps.vue';
 import { DEFAULT_TABLE_BODY } from '../../helpers/Constants';
-
+import Visualizer from '../Layout/Visualizer.vue';
 export default {
+  components: {
+    'layout-visualizer': Visualizer,
+  },
   name: 'xlsx-visualizer',
   mixins: [CommonProps],
   data: () => ({

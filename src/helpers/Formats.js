@@ -10,6 +10,8 @@ export class Formats {
         'image/jpeg',
         'image/gif',
         'image/svg+xml',
+        'image/webp',
+        // 'image/tiff',
         // 'application/vnd.ms-powerpoint',
         // 'application/mspowerpoint',
         // 'application/powerpoint',
