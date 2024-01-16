@@ -1,7 +1,7 @@
 <template>
   <div class="error-container">
     <div class="error-icon">
-      <img src="@/assets/img/not_support.svg" alt="">
+      <img src="@/assets/img/not_support.svg" alt="" />
     </div>
     <div class="error-message">
       <div class="error-server-message">
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import CommonProps from "@/components/CommonProps";
+import CommonProps from "../CommonProps";
 export default {
   name: "UnsupportedFormat",
   mixins: [CommonProps],

@@ -11,9 +11,9 @@ import LoadingDocument from '../LoadingDocument';
 import PdfVisualizer from '../PdfVisualizer';
 import TextVisualizer from '../TextVisualizer';
 import XlsxVisualizer from '../XlsxVisualizer';
-import ErrorComponent from "@/components/ErrorComponent";
-import ImageVisualizer from "@/components/ImageVisualizer";
-import UnsupportedFormat from "@/components/UnsupportedFormat/UnsupportedFormat";
+import ErrorComponent from "../ErrorComponent";
+import ImageVisualizer from "../ImageVisualizer";
+import UnsupportedFormat from "../UnsupportedFormat";
 import { Formats } from "@/helpers/Formats";
 
 export default {

@@ -1,14 +1,5 @@
 <template>
   <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
-    <!-- <template #left>
-      <div class="toolbar-item">
-        <i class="bi bi-search" @click="showSearch = !showSearch"></i>
-        <div class="toolbar-item-option" v-if="showSearch">
-          <input type="text" name="search" id="search" placeholder="Buscar..." v-model="search">
-          <span class="match-text" v-text="match_text"></span>
-        </div>
-      </div>
-    </template> -->
     <template #center>
       <div class="toolbar-item" @click="nextSection">
         <i class="bi bi-arrow-down-short"></i>

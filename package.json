@@ -1,6 +1,6 @@
 {
   "name": "sheets_document_visualizer",
-  "version": "0.4.5",
+  "version": "0.4.7",
   "private": false,
   "description": "Visualizador de documentos para Sheets",
   "author": "Coderhub",
@@ -9,7 +9,9 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "build:lib": "vue-cli-service build --target lib --name index ./src/install.js"
+    "build:lib": "vue-cli-service build --target lib --name index ./src/install.js",
+    "docs": "node src/docs.mjs",
+    "publish:lib": "npm run docs && npm run build:lib && npm publish"
   },
   "main": "dist/index.common.js",
   "files": [
@@ -22,7 +24,7 @@
     "bootstrap-icons": "^1.9.1",
     "core-js": "^3.8.3",
     "docx-preview": "^0.3.0",
-    "pdfjs-dist": "^2.15.349",
+    "pdfjs-dist": "^4.0",
     "print-js": "^1.6.0",
     "sass": "^1.62.1",
     "sass-loader": "^13.3.1",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@babel/plugin-transform-private-methods": "^7.23.3",
     "@babel/preset-env": "^7.18.10",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
@@ -39,6 +42,8 @@
     "@vue/cli-service": "~5.0.0",
     "@vue/test-utils": "^1.3.0",
     "@vue/vue2-jest": "^27.0.0-alpha.2",
+    "@vuedoc/md": "^4.0.0-beta8",
+    "@vuedoc/parser": "^4.0.0-beta14",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^27.0.6",
     "eslint": "^7.32.0",

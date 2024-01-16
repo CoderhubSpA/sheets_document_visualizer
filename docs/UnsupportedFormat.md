@@ -1,4 +1,4 @@
-# ImageVisualizer
+# UnsupportedFormat
 
 ## Props
 
@@ -8,12 +8,6 @@
 | `format`            | `string`  |             | `""`    |
 | `can-download-file` | `boolean` |             | `true`  |
 | `data-endpoint`     | `string`  |             | `""`    |
-
-## Computed Properties
-
-| Name  | Type     | Description                       |
-| ----- | -------- | --------------------------------- |
-| `src` | `string` | **Dependencies:** `format`, `img` |
 
 ## Methods
 

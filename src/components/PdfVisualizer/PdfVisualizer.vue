@@ -53,7 +53,7 @@
 </template>
 <script>
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
-import PDFJSWorker from 'pdfjs-dist/build/pdf.worker.entry';
+import PDFJSWorker from 'pdfjs-dist/build/pdf.worker.mjs';
 import CommonProps from '../CommonProps.vue';
 import printJS from "print-js";
 import axios from 'axios';

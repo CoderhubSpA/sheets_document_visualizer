@@ -1,4 +1,4 @@
-# ImageVisualizer
+# text-visualizer
 
 ## Props
 
@@ -11,19 +11,26 @@
 
 ## Computed Properties
 
-| Name  | Type     | Description                       |
-| ----- | -------- | --------------------------------- |
-| `src` | `string` | **Dependencies:** `format`, `img` |
+| Name         | Type      | Description                                                                                            |
+| ------------ | --------- | ------------------------------------------------------------------------------------------------------ |
+| `match_text` | `unknown` | Calcula todas las coincidencias de busquedas y muestra la cantidad<br/>**Dependencies:** `$`, `result` |
 
 ## Methods
 
 ### load()
+
+Carga del documento .txt
+en el visor
 
 **Syntax**
 
 ```typescript
 async load(): Promise<void>
 ```
+
+**Return value**
+
+Void
 
 ### print()
 
@@ -62,4 +69,18 @@ Descarga de documento PDF
 
 ```typescript
 download(): void
+```
+
+### searchInContent()
+
+Busqueda de texto en el contenido
+y coloca las coincidencias dentro de un
+span.highlight y renderiza nuevamente el documento
+con las modificaciones, en caso de no haber parametro de busqueda
+coloca el texto original
+
+**Syntax**
+
+```typescript
+searchInContent(search: unknown): void
 ```

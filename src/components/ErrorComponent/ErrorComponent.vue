@@ -1,7 +1,7 @@
 <template>
   <div class="error-container">
     <div class="error-icon">
-      <img src="@/assets/img/error.svg" alt="">
+      <img src="@/assets/img/error.svg" alt="" />
     </div>
     <div class="error-message">
       <div class="error-status-number">
@@ -19,7 +19,7 @@
 
 <script>
 
-import CommonProps from "@/components/CommonProps";
+import CommonProps from "../CommonProps";
 
 export default {
   name: "ErrorComponent",

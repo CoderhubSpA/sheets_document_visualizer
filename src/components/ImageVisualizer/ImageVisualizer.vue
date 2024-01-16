@@ -1,13 +1,13 @@
 <template>
   <div ref="image-viewer" class="image-viewer">
     <div class="image-container">
-      <img :src="img" alt="">
+      <img :src="img" alt="" />
     </div>
   </div>
 </template>
 
 <script>
-import CommonProps from "@/components/CommonProps";
+import CommonProps from "../CommonProps";
 
 export default {
   name: "ImageVisualizer",
