@@ -55,7 +55,6 @@ export default {
          */
         async download() {
             const name = this.fileName || `sheets.${this.fileNameExtension}`;
-            console.log("name", name);
 
             const objectURL = URL.createObjectURL(this.blob);
             const link = document.createElement('a');

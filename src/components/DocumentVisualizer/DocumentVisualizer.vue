@@ -1,6 +1,6 @@
 <template>
   <div>
-    <component :is="viewer" :blob="blob" :format="format" :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint"/>
+    <component :is="viewer" :blob="blob" :format="format" :canDownloadFile="canDownloadFile"/>
   </div>
 </template>
 <script>
@@ -156,6 +156,8 @@ export default {
     readFromURL() {
       axios.get(this.src, {
         responseType: 'blob',
+        headers: {
+          'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YWQ3MzYwYi1mZWVjLTRlNGItOTJkOS1hZGUzYWYyNjJlMTIiLCJqdGkiOiI4MWUwMjI4M2RhZGFmOTkxZTI1NDkzYWVjMmM2NDA3YTRhOWVmZjRiOGRmMWE0YThmYjI4MDRlODg5OTg0NTcwYzRiNDE5NTEzODZhM2E3NSIsImlhdCI6MTcxNTYzNTQyOS43MzI3NywibmJmIjoxNzE1NjM1NDI5LjczMjc3MiwiZXhwIjoxNzQ3MTcxNDI5LjcwODU4MSwic3ViIjoiYmZjYzI5OGQtNTNlNC00Mzk3LWFiN2UtZjM2YzhlYzU0ZjlkIiwic2NvcGVzIjpbXX0.L5mXL3vYtAfivgWRj_y6x-s4GFvpo57w8MBFGcPDADQoLlAPqRguLK4x8v13SMEqPazMtjlFpZhZoDyW6MNdGlm1ePKGcNyCvZIyKiNEZjcdh-iALImIrQXuEji0IJzJ-auX_5SleE8rZfOv9gyGC-b1vy0i7JrQ_ESX1GMP0TH56XsaH4K09yKUK0ktj62gAzIeuZvETlsD0k-CcXEsttZfR0Z5esMJ5H7eMX4WzTMXYtGeBoJ2YgYf_Rj2zMH3DKWejvhXbF8VlQt6riaPMBBiIi4Z9yEH8owL6hMCZw1Bn4DFRWE97m4m3Ps5X8SLWBwlA_OPLICU6TzlXab1gZ4poApoI1vqSVoHT8FvJT40W3_FmBs3cSc7dXKLSEL6k71S5LUTaY_UTrLI8dH0YGX6PcreLpy_f-iRZ8wS0bi5LYrPT4QZDTnjfvjTcSM8Ga8FM8uRqWhrC1z0rZeSNkWnbTTwxUp6FSOzokVPbcmpvVPI14S-VTc3-GapOIH00lRrtHCIby35hfI_Dc8pQ0YuJKXELE_viWam6WEaT_oHFv-VY7alxX0zo2PKdihX_QUQ_q8G0iSwuLSRHHOpyRVm0-GgZb4mm5N-1MhSA4PzeHaObqIh7Xji7Z1v9aNea3hXdZ52PmvI09ngXunEuE_Vx_GU4OFqsnux9piXkzk`}
       }).then((response) => {
         if (Formats.isSupported(response.data.type)) {
           this.format = response.data.type;
