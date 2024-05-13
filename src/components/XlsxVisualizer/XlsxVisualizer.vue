@@ -1,5 +1,5 @@
 <template>
-   <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
+   <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="xlsx">
     <div class="xlsx-visualizer">
       <div class="xlsx-container" ref="xlsx-container" v-html="dataSheet" />
       <div class="sheets-name">
@@ -12,7 +12,6 @@
 </template>
 <script>
 import * as XLSX from 'xlsx';
-import axios from 'axios';
 import CommonProps from '../CommonProps.vue';
 import { DEFAULT_TABLE_BODY } from '../../helpers/Constants';
 import Visualizer from '../Layout/Visualizer.vue';
@@ -107,24 +106,6 @@ export default {
      */
     renderTable(table) {
       this.dataSheet = table.outerHTML;
-    },
-    /**
-     * Realiza la descarga del documento con su respectivo nombre
-     */
-    async download() {
-      const response  = await axios.get(this.dataEndpoint);
-      const parts  = this.dataEndpoint.split('/');
-      const id = parts[parts.length -1];
-      const row = response.data.content.entities_fk.document.find((el) => {
-        return el.id === id;
-      })
-
-      const objectURL  = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = objectURL;
-      link.download = row.name || 'sheets.xlsx';
-      link.click()
-      link.remove();
     },
     /**
      * Cambia la hoja a visualizar

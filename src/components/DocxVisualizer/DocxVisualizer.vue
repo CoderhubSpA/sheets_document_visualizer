@@ -1,5 +1,5 @@
 <template>
-  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
+  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="docx">
     <!-- <template #left>
       <div class="toolbar-item">
         <i class="bi bi-search" @click="showSearch = !showSearch"></i>
@@ -33,7 +33,6 @@
 import Visualizer from '../Layout/Visualizer.vue';
 import { renderAsync } from 'docx-preview'
 import CommonProps from '../CommonProps.vue';
-import axios from 'axios';
 export default {
   components: {
     'layout-visualizer': Visualizer,
@@ -126,28 +125,6 @@ export default {
           const sections = docContainer.querySelectorAll('section');
           this.numSections = sections.length;
         })
-    },
-    /**
-     * Descarga de documento docx
-     * @return void
-     */
-    async download() {
-      const response = await axios.get(this.dataEndpoint);
-
-      const parts = this.dataEndpoint.split('/');
-      const id = parts[parts.length - 1];
-      const row = response.data.content.entities_fk.document.find((el) => {
-        return el.id === id;
-      })
-
-      const name = row.name || 'sheets.docx';
-
-      const objectURL = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = objectURL;
-      link.download = name;
-      link.click()
-      link.remove();
     },
     /**
      * Busqueda de texto en el contenido
