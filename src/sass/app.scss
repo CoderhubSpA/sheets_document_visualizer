@@ -16,6 +16,7 @@
 
 .visualizer {
   max-height: 80% !important;
+  overflow-y: hidden !important;
 }
 .toolbar {
   background-color: $backgroud-toolbar;
@@ -78,7 +79,6 @@
 
     position: absolute;
     height: 90%;
-    overflow-y: scroll;
     flex-direction: column;
     &::after {
       opacity: 0.2;

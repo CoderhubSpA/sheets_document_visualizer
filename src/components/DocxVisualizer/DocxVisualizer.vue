@@ -23,9 +23,17 @@
         <span v-text="numSections"></span>
         <i class="bi bi-file-earmark-fill page-number"></i>
       </div>
+      <!-- Zoom In -->
+      <div class="toolbar-item" @click="zoomIn">
+        <i class="bi bi-zoom-in"></i>
+      </div>
+      <!-- Zoom Out -->
+      <div class="toolbar-item" @click="zoomOut">
+        <i class="bi bi-zoom-out"></i>
+      </div>
     </template>
     <div class="document-content">
-      <div ref="docx-viewer" id="docx-content" v-html="result" />
+      <div ref="docx-viewer" id="docx-content" v-html="result" :style="{ transform: `scale(${zoom})`, transformOrigin: 'top left' }"/>
     </div>
   </layout-visualizer>
 </template>
@@ -34,6 +42,7 @@ import Visualizer from '../Layout/Visualizer.vue';
 import { renderAsync } from 'docx-preview'
 import CommonProps from '../CommonProps.vue';
 import axios from 'axios';
+import mammoth from 'mammoth';
 export default {
   components: {
     'layout-visualizer': Visualizer,
@@ -58,6 +67,7 @@ export default {
     // informacion despues de realizar una busqueda
     result: '',
     numSections: 0,
+    zoom: 1,
     section: 1
   }),
   computed: {
@@ -120,12 +130,18 @@ export default {
       const docContainer = document.getElementById('docx-content')
       const options = {
         // inWrapper: false
+        ignoreLastRenderedPageBreak : false,
       };
       renderAsync(this.blob, docContainer, null, options)
         .then(() => {
           const sections = docContainer.querySelectorAll('section');
           this.numSections = sections.length;
+        });
+      mammoth.convertToHtml({ arrayBuffer: this.blob })
+        .then((result) => {
+          console.log(result);
         })
+        .done();
     },
     /**
      * Descarga de documento docx
@@ -164,6 +180,16 @@ export default {
           console.log(s.innerHTML)
           // s.html.replaceAll(search, `<span class="highlight">${search}</span>`)
         });
+      }
+    },
+    zoomIn() {
+      if (this.zoom < 3) {
+        this.zoom += 0.1;
+      }
+    },
+    zoomOut() {
+      if (this.zoom > 1) {
+        this.zoom -= 0.1;
       }
     }
   }
