@@ -48,7 +48,6 @@
         <!--  -->
       </div>
     </div>
-    
   </layout-visualizer>
 </template>
 <script>

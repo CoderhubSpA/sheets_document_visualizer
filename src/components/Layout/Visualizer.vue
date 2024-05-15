@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="visualizer-template">
         <div class="toolbar">
             <div class="toolbar-items">
                 <div class="left-options">

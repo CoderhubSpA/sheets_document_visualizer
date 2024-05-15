@@ -42,7 +42,6 @@ import Visualizer from '../Layout/Visualizer.vue';
 import { renderAsync } from 'docx-preview'
 import CommonProps from '../CommonProps.vue';
 import axios from 'axios';
-import mammoth from 'mammoth';
 export default {
   components: {
     'layout-visualizer': Visualizer,
@@ -137,11 +136,6 @@ export default {
           const sections = docContainer.querySelectorAll('section');
           this.numSections = sections.length;
         });
-      mammoth.convertToHtml({ arrayBuffer: this.blob })
-        .then((result) => {
-          console.log(result);
-        })
-        .done();
     },
     /**
      * Descarga de documento docx
