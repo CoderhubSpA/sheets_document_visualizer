@@ -43,7 +43,7 @@
       </div>
 
     </template>
-    <div class="document-content">
+    <div class="document-content" ref="documentContainer">
       <div class="pdf-content" ref="pdf-content">
         <!--  -->
       </div>
@@ -96,7 +96,11 @@ export default {
       oldThumb.classList.remove(activeClass);
       const newThumb = document.getElementById(`thumb-page-${newest}`);
       newThumb.classList.add(activeClass);
-      newThumb.scrollIntoView();
+      const sidebarContainer = this.$refs.sidebar;
+      sidebarContainer.scrollTo({
+        top: newThumb.offsetTop - sidebarContainer.offsetTop,
+        behavior: 'smooth'
+      })
     },
     /**
      * Mostrar u ocultar el sidebar segun el estado
@@ -110,7 +114,11 @@ export default {
   methods: {
     setPage(p) {
       const page = document.querySelector(`canvas[document-page="${p}"]`);
-      page.scrollIntoView();
+      const documentContainer = this.$refs.documentContainer;
+      documentContainer.scrollTo({
+          top: page.offsetTop,
+          behavior: 'smooth'
+      });
     },
     /**
      * Desplaza el focus en el visor

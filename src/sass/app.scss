@@ -17,8 +17,7 @@
 .toolbar {
   background-color: $backgroud-toolbar;
   width: 100%;
-  min-height: 28px;
-  max-height: 10vh;
+  height: 35px;  
   color: white;
   z-index: 1000;
   grid-row: 1 / 2;
@@ -72,12 +71,13 @@
   }
 
   .sidebar-container {
-    margin: 28px 0px;
-    padding: 0;
-    width: 150px;
-    background-color: rgba(157, 159, 161, 0.5);
-    overflow-y: auto;
     position: absolute;
+    top: 35px; /* Adjust based on the toolbar height */
+    left: 0;
+    width: 200px;
+    bottom: 0;
+    background-color: rgba(157, 159, 161, 0.5);
+    overflow-y: scroll;
     height: calc(100% - 1vh);
     flex-direction: column;
     &::after {
@@ -134,7 +134,7 @@ input.go-to-page:focus {
   grid-template-rows: auto 1fr;
   align-items: center;
   justify-items: center;
-  overflow-y: hidden;
+  position: relative;
 }
 .document-content {
   overflow-y: scroll;
