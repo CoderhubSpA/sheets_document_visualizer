@@ -116,7 +116,7 @@ export default {
       const page = document.querySelector(`canvas[document-page="${p}"]`);
       const documentContainer = this.$refs.documentContainer;
       documentContainer.scrollTo({
-          top: page.offsetTop,
+          top: page.offsetTop - documentContainer.offsetTop,
           behavior: 'smooth'
       });
     },
