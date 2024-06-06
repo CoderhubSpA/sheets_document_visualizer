@@ -41,7 +41,6 @@
 import Visualizer from '../Layout/Visualizer.vue';
 import { renderAsync } from 'docx-preview'
 import CommonProps from '../CommonProps.vue';
-import axios from 'axios';
 import Mark from 'mark.js';
 export default {
   components: {
@@ -130,28 +129,6 @@ export default {
         this.docxContent = docContainer.innerHTML;
         this.numSections = docContainer.querySelectorAll('document-content > section').length;
       });
-    },
-    /**
-     * Descarga de documento docx
-     * @return void
-     */
-    async download() {
-      const response = await axios.get(this.dataEndpoint);
-
-      const parts = this.dataEndpoint.split('/');
-      const id = parts[parts.length - 1];
-      const row = response.data.content.entities_fk.document.find((el) => {
-        return el.id === id;
-      })
-
-      const name = row.name || 'sheets.docx';
-
-      const objectURL = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = objectURL;
-      link.download = name;
-      link.click()
-      link.remove();
     },
     /**
      * Busqueda de texto en el contenido
