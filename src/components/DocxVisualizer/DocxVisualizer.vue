@@ -1,6 +1,6 @@
 <template>
-  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="docx">
-    <!-- <template #left>
+  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
+    <template #left>
       <div class="toolbar-item">
         <i class="bi bi-search" @click="showSearch = !showSearch"></i>
         <div class="toolbar-item-option" v-if="showSearch">
@@ -8,7 +8,7 @@
           <span class="match-text" v-text="match_text"></span>
         </div>
       </div>
-    </template> -->
+    </template>
     <template #center>
       <div class="toolbar-item" @click="nextSection">
         <i class="bi bi-arrow-down-short"></i>
@@ -32,7 +32,7 @@
         <i class="bi bi-zoom-out"></i>
       </div>
     </template>
-    <div class="document-content">
+    <div class="document-content" id="document-content">
       <div ref="docx-viewer" id="docx-content" v-html="result" :style="{ transform: `scale(${zoom})`, transformOrigin: 'top left' }"/>
     </div>
   </layout-visualizer>
@@ -41,6 +41,7 @@
 import Visualizer from '../Layout/Visualizer.vue';
 import { renderAsync } from 'docx-preview'
 import CommonProps from '../CommonProps.vue';
+import Mark from 'mark.js';
 export default {
   components: {
     'layout-visualizer': Visualizer,
@@ -61,9 +62,11 @@ export default {
     // mostrar/ocultar opcion de busqueda
     showSearch: false,
     // informacion original
-    docx: '',
+    docxContent: '',
+    highlightedContent: '',
     // informacion despues de realizar una busqueda
     result: '',
+    numMatches: 0,
     numSections: 0,
     zoom: 1,
     section: 1
@@ -75,15 +78,7 @@ export default {
      * @returns {string}
      */
     match_text() {
-      let text = '';
-      // const matches = this.$.querySelector('span.highlight');
-      const matches = this.result.split(' ').filter((w) => {
-        return w.includes('<span')
-      });
-      if (matches) {
-        text = `${matches.length} match`;
-      }
-      return text;
+      return `${this.numMatches} match`;
     }
   },
   watch: {
@@ -130,11 +125,10 @@ export default {
         // inWrapper: false
         ignoreLastRenderedPageBreak : false,
       };
-      renderAsync(this.blob, docContainer, null, options)
-        .then(() => {
-          const sections = docContainer.querySelectorAll('section');
-          this.numSections = sections.length;
-        });
+      renderAsync(this.blob, docContainer, null, options).then(() => {
+        this.docxContent = docContainer.innerHTML;
+        this.numSections = docContainer.querySelectorAll('document-content > section').length;
+      });
     },
     /**
      * Busqueda de texto en el contenido
@@ -145,12 +139,18 @@ export default {
      */
     searchInContent(search) {
       if (search) {
-
-        const sections = document.querySelectorAll('div.docx-wrapper > section');
-        sections.forEach(s => {
-          console.log(s.innerHTML)
-          // s.html.replaceAll(search, `<span class="highlight">${search}</span>`)
+        var instance = new Mark(document.getElementById('docx-content'));
+        instance.unmark();
+        instance.mark(search, {
+          separateWordSearch: false,
+          className: 'highlight',
+          done: (counter) => {
+            this.numMatches = counter;
+          }
         });
+      } else {
+        this.numMatches = 0;
+        this.result = this.docxContent;
       }
     },
     zoomIn() {
