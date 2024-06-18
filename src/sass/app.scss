@@ -3,6 +3,12 @@
 @import "./error.scss";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
+#html-div{
+  height: 100%;
+}
+#body-div{
+  height: 100%;
+} 
 .highlight {
   background-color: $highlight;
 }
