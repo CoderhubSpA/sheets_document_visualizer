@@ -10,7 +10,7 @@
       </div>
     </template>
     <template #center>
-      <div class="toolbar-item" @click="nextSection">
+      <!-- <div class="toolbar-item" @click="nextSection">
         <i class="bi bi-arrow-down-short"></i>
       </div>
       <div class="toolbar-item" @click="prevSection">
@@ -22,7 +22,7 @@
       <div class="toolbar-item">
         <span v-text="numSections"></span>
         <i class="bi bi-file-earmark-fill page-number"></i>
-      </div>
+      </div> -->
       <!-- Zoom In -->
       <div class="toolbar-item" @click="zoomIn">
         <i class="bi bi-zoom-in"></i>
@@ -87,33 +87,33 @@ export default {
     }
   },
   methods: {
-    nextSection() {
-      if (this.section + 1 <= this.numSections) {
-        this.section++;
-        this.setSection(this.section)
-      }
-    },
-    prevSection() {
-      if (1 <= this.section - 1) {
-        this.section--;
-        this.setSection(this.section);
-      }
-    },
-    changePage(e) {
-      const { key } = e;
-      if (!Number.isNaN(key)) {
-        const { value } = e.target;
-        const num = Number(value);
-        if ((num >= 1 && num <= this.numSections) && num) {
-          this.setSection(num);
-        }
-      }
-    },
-    setSection(s) {
-      const sections = document.querySelectorAll('section');
-      const section = sections[s - 1];
-      section.scrollIntoView();
-    },
+    // nextSection() {
+    //   if (this.section + 1 <= this.numSections) {
+    //     this.section++;
+    //     this.setSection(this.section)
+    //   }
+    // },
+    // prevSection() {
+    //   if (1 <= this.section - 1) {
+    //     this.section--;
+    //     this.setSection(this.section);
+    //   }
+    // },
+    // changePage(e) {
+    //   const { key } = e;
+    //   if (!Number.isNaN(key)) {
+    //     const { value } = e.target;
+    //     const num = Number(value);
+    //     if ((num >= 1 && num <= this.numSections) && num) {
+    //       this.setSection(num);
+    //     }
+    //   }
+    // },
+    // setSection(s) {
+    //   const sections = document.querySelectorAll('section');
+    //   const section = sections[s - 1];
+    //   section.scrollIntoView();
+    // },
     /**
      * Convierte el Un Blob de un documento .docx
      * en HTML para ser visualizado en el componente
