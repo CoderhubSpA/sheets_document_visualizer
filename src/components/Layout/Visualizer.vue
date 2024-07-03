@@ -25,9 +25,15 @@
         <slot>
             <!-- CONTENIDO -->
         </slot>
+        <div class="package-version">
+            {{ version }}
+        </div>
     </div>
 </template>
 <script>
+const packageJSON = require('../../../package.json');
+
+
 export default {
     name: 'layout-visualizer',
     props: {
@@ -48,6 +54,11 @@ export default {
             default: '',
         },
     },
+    computed: {
+        version() {
+            return `version:${packageJSON.version}`;
+        },
+    },
     methods: {
         /**
          * Realiza la descarga del archivo
@@ -55,9 +66,9 @@ export default {
          */
         async download() {
             const name = this.fileName || `sheets.${this.fileNameExtension}`;
-
             const objectURL = URL.createObjectURL(this.blob);
             const link = document.createElement('a');
+
             link.href = objectURL;
             link.download = name;
             link.click()
