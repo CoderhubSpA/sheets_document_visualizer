@@ -1,5 +1,5 @@
 <template>
-  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
+  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="docx">
     <template #left>
       <div class="toolbar-item">
         <i class="bi bi-search" @click="showSearch = !showSearch"></i>
