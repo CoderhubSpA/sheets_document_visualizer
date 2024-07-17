@@ -104,7 +104,12 @@
     }
   }
 }
-
+.package-version {
+  text-align: end;
+  padding-right: 4px;
+  color: #ffffff;
+  background-color: #6D757D;
+}
 input.go-to-page {
   width: 20px;
   border: 1px solid #c8c9ce;
@@ -192,7 +197,7 @@ input.go-to-page:focus {
   align-content: space-between;
   overflow-y: hidden;
   flex: 1;
-  
+  height: 100%;
 }
 .pdf-page {
     max-height: 100%;
@@ -368,4 +373,5 @@ input.go-to-page:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  
 }

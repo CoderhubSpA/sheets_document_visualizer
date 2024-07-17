@@ -117,7 +117,7 @@ export default {
      * Construye el endpoint para la descarga del archivo
      */
     dataEndpoint() {
-      return this.type_of_src === 'string' ? `/entity/data${this.src}` : null;
+      return this.type_of_src === 'string' ? `${this.src}` : null;
     }
   },
   watch: {
@@ -134,29 +134,6 @@ export default {
     this.readSrc()
   },
   methods: {
-    /**
-     * Realiza la descarga del archivo
-     * @return {Void}
-     */
-    async download() {
-      const response = await axios.get(this.dataEndpoint);
-
-      const parts = this.dataEndpoint.split('/');
-      const id = parts[parts.length - 1];
-
-      const row = response.data.content.entities_fk.document.find((el) => {
-        return el.id === id;
-      });
-
-      const name = row.name;
-
-      const objectURL = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = objectURL;
-      link.download = name;
-      link.click()
-      link.remove();
-    },
     /**
      * Si el visualizador posee una URL
      * realiza un llamado al backend
@@ -210,5 +187,3 @@ export default {
   },
 };
 </script>
-
-

@@ -51,18 +51,7 @@ export default {
             '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
             '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
         return !!pattern.test(str);
-    },
-    /**
-     * Descarga de documento PDF
-     */
-    download() {
-      const url  = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'sheets.txt';
-      link.click()
-      link.remove();
-    },
+    }
   }
 };
 </script>

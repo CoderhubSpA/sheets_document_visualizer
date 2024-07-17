@@ -1,5 +1,5 @@
 <template>
-  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint">
+  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="pdf">
     <template #left>
       <div class="toolbar-item" @click="showSideBar = !showSideBar">
         <i class="bi bi-list"></i>
@@ -37,11 +37,6 @@
       <div class="toolbar-item" @click="print">
         <i class="bi bi-printer-fill"></i>
       </div>
-      <!-- Descargar -->
-      <div class="toolbar-item" @click="download">
-        <i class="bi bi-cloud-arrow-down-fill"></i>
-      </div>
-
     </template>
     <div class="document-content" ref="documentContainer">
       <div class="pdf-content" ref="pdf-content">
@@ -55,7 +50,6 @@ import * as pdfjsLib from "pdfjs-dist/build/pdf";
 import PDFJSWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import CommonProps from '../CommonProps.vue';
 import printJS from "print-js";
-import axios from 'axios';
 import Visualizer from '../Layout/Visualizer.vue';
 pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker;
 
@@ -64,6 +58,12 @@ export default {
     'layout-visualizer': Visualizer,
   },
   name: 'pdf-visualizer',
+  props: {
+    canDownloadFile: {
+        type: Boolean,
+        default: true,
+    },
+  },
   mixins: [CommonProps],
   data: () => ({
     pdf: null,
@@ -252,28 +252,6 @@ export default {
         const fThumb = document.getElementById(`thumb-page-1`);
         fThumb.classList.add(['active'])
       });
-    },
-    /**
-     * Descarga de documento PDF
-     * @return void
-     */
-    async download() {
-      const response = await axios.get(this.dataEndpoint);
-
-      const parts = this.dataEndpoint.split('/');
-      const id = parts[parts.length - 1];
-      const row = response.data.content.entities_fk.document.find((el) => {
-        return el.id === id;
-      })
-
-      const name = row.name || 'sheets.pdf';
-
-      const objectURL = URL.createObjectURL(this.blob);
-      const link = document.createElement('a');
-      link.href = objectURL;
-      link.download = name;
-      link.click()
-      link.remove();
     },
     /**
      * Imprimir document
