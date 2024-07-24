@@ -25,9 +25,6 @@
         <slot>
             <!-- CONTENIDO -->
         </slot>
-        <div class="package-version">
-            {{ version }}
-        </div>
     </div>
 </template>
 <script>
