@@ -20,7 +20,7 @@
       </div>
     </template>
     <div class="document-content" id="document-content">
-      <div ref="docx-viewer" id="docx-content" v-html="result" :style="{ transform: `scale(${zoom})`, transformOrigin: 'top left' }"/>
+      <div ref="docx-viewer" id="docx-content" v-html="result" :style="{ transform: `scale(${zoom})`, transformOrigin: 'top center', width: '100%' }"/>
     </div>
   </layout-visualizer>
 </template>
@@ -119,7 +119,7 @@ export default {
       }
     },
     zoomOut() {
-      if (this.zoom > 1) {
+      if (this.zoom > 0.5) {
         this.zoom -= 0.1;
       }
     }
