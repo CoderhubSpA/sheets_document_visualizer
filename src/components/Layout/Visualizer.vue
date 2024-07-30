@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="visualizer-template">
         <div class="toolbar">
             <div class="toolbar-items">
                 <div class="left-options">
@@ -25,9 +25,6 @@
         <slot>
             <!-- CONTENIDO -->
         </slot>
-        <div class="package-version">
-            {{ version }}
-        </div>
     </div>
 </template>
 <script>

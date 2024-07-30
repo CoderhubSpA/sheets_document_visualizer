@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="visualizer-container">
     <component :is="viewer" :blob="blob" :format="format" :canDownloadFile="canDownloadFile"/>
   </div>
 </template>
