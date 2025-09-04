@@ -46,6 +46,10 @@ export default {
   },
   methods: {
     async load() {
+      if (!this.blob || !this.blob.data) {
+        return;
+      }
+
       const server_response = await this.blob.data.text();
       this.server = JSON.parse(server_response);
     }

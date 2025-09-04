@@ -1,5 +1,5 @@
 <template>
-  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="docx">
+  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" :fileName="fileName" fileNameExtension="docx">
     <template #left>
       <div class="toolbar-item">
         <i class="bi bi-search" @click="showSearch = !showSearch"></i>
@@ -43,6 +43,12 @@ export default {
    * componente
    */
   mixins: [CommonProps],
+  props: {
+    fileName: {
+      type: String,
+      default: '',
+    },
+  },
   data: () => ({
     // texto a buscar
     search: '',

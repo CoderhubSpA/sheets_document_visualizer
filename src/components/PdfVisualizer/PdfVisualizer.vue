@@ -1,5 +1,5 @@
 <template>
-  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="pdf">
+  <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" :fileName="fileName" fileNameExtension="pdf" :fileURL="fileURL">
     <template #left>
       <div class="toolbar-item" @click="showSideBar = !showSideBar">
         <i class="bi bi-list"></i>
@@ -62,6 +62,14 @@ export default {
     canDownloadFile: {
         type: Boolean,
         default: true,
+    },
+    fileName: {
+      type: String,
+      default: '',
+    },
+    fileURL: {
+      type: String,
+      default: '',
     },
   },
   mixins: [CommonProps],

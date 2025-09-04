@@ -1,5 +1,5 @@
 <template>
-   <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" fileName="" fileNameExtension="xlsx">
+   <layout-visualizer :canDownloadFile="canDownloadFile" :dataEndpoint="dataEndpoint" :blob="blob" :fileName="fileName" fileNameExtension="xlsx">
     <div class="xlsx-visualizer">
       <div class="xlsx-container" ref="xlsx-container" v-html="dataSheet" />
       <div class="sheets-name">
@@ -20,6 +20,12 @@ export default {
     'layout-visualizer': Visualizer,
   },
   name: 'xlsx-visualizer',
+  props: {
+    fileName: {
+      type: String,
+      default: '',
+    },
+  },
   mixins: [CommonProps],
   data: () => ({
     sheetsName: [],
