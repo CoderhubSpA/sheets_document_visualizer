@@ -8,15 +8,15 @@
 
 <script>
 import DocumentVisualizer from '@/components/DocumentVisualizer';
-// import DocxVisualizer from "@/components/DocxVisualizer";
+
+
 export default {
   name: 'App',
   components: {
-    DocumentVisualizer,
-    // DocxVisualizer
+    DocumentVisualizer
   },
   data: () => ({
-    file: 'http://127.0.0.1:8000/file',
+    file: 'http://sheets.developement/document/{id}',
   }),
   methods: {
     onChange(event) {

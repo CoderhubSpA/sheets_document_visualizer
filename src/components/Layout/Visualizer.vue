@@ -42,11 +42,15 @@ export default {
             type: Blob,
             require: true,
         },
-         fileName: {
+        fileName: {
             type: String,
             default: '',
         },
         fileNameExtension: {
+            type: String,
+            default: '',
+        },
+        fileURL: {
             type: String,
             default: '',
         },
@@ -62,12 +66,12 @@ export default {
          * @return {Void}
          */
         async download() {
-            const name = this.fileName || `sheets.${this.fileNameExtension}`;
+            const name = this.fileName || "";
             const objectURL = URL.createObjectURL(this.blob);
             const link = document.createElement('a');
 
             link.href = objectURL;
-            link.download = name;
+            link.download = `${name}`;
             link.click()
             link.remove();
         },

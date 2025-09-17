@@ -1,6 +1,6 @@
 <template>
   <div class="visualizer-container">
-    <component :is="viewer" :blob="blob" :format="format" :canDownloadFile="canDownloadFile"/>
+    <component :is="viewer" :blob="blob" :format="format" :canDownloadFile="true" :fileName="fileName" :fileURL="fileURL"/>
   </div>
 </template>
 <script>
@@ -41,7 +41,13 @@ export default {
      * Representacion Blob del archivo
      * @format Blob
      */
-    blob: null
+    blob: null,
+    /**
+     * Nombre del archivo a descargar
+     * @format String
+     */
+    fileName: '',
+    fileURL: '',
   }),
   computed: {
     /**
@@ -159,19 +165,34 @@ export default {
       }).then((response) => {
         if (Formats.isSupported(response.data.type)) {
           this.format = response.data.type;
+
           this.blob = new Blob([response.data], { type: this.format });
         } else {
           this.format = 'unsupported';
+
           const data = {
             src: this.src
           }
+
           this.blob = new Blob([JSON.stringify(data)]);
         }
 
+        this.fileURL = this.src;
+
+        // obtiene el nombre del archivo desde las cabeceras
+        const disposition = response.headers['x-file-name'];
+        if (disposition && disposition.indexOf('filename') !== -1) {
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(disposition);
+
+          if (matches != null && matches[1]) { 
+            this.fileName = matches[1].replace(/['"]/g, '');
+          }
+        }
       }).catch((error) => {
         console.log(error)
         this.format = 'error';
-        this.blob = error.response;
+        this.blob = { statusText: error.response.data, status: 'HTTP_ERROR' };
       });
     },
     /**
