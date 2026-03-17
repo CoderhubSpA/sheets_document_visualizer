@@ -46,12 +46,14 @@
   </layout-visualizer>
 </template>
 <script>
-import * as pdfjsLib from "pdfjs-dist/build/pdf";
-import PDFJSWorker from 'pdfjs-dist/build/pdf.worker.entry';
+
+import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/build/pdf.mjs';
 import CommonProps from '../CommonProps.vue';
 import printJS from "print-js";
 import Visualizer from '../Layout/Visualizer.vue';
-pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker;
+
+const workerUrl = `${window.location.origin}/js/pdf.worker.mjs`;
+GlobalWorkerOptions.workerSrc = workerUrl;
 
 export default {
   components: {
@@ -60,8 +62,8 @@ export default {
   name: 'pdf-visualizer',
   props: {
     canDownloadFile: {
-        type: Boolean,
-        default: true,
+      type: Boolean,
+      default: true,
     },
     fileName: {
       type: String,
@@ -82,17 +84,9 @@ export default {
     showSideBar: false
   }),
   computed: {
-    /**
-     * Permitir ir a la siguiente pagina, si esta existe
-     * @returns {boolean}
-     */
     can_go_next_page() {
-      return (this.page + 1) <= this.numPages
+      return (this.page + 1) <= this.numPages;
     },
-    /**
-     * Permitir ir a la pagina anterior, si esta existe
-     * @returns {boolean}
-     */
     can_go_prev_page() {
       return 1 <= (this.page - 1);
     }
@@ -108,13 +102,8 @@ export default {
       sidebarContainer.scrollTo({
         top: newThumb.offsetTop - sidebarContainer.offsetTop,
         behavior: 'smooth'
-      })
+      });
     },
-    /**
-     * Mostrar u ocultar el sidebar segun el estado
-     * de showSideBar
-     * @param val
-     */
     showSideBar(val) {
       document.getElementById('sidebar').style.width = val ? '150px' : '0px';
     }
@@ -124,8 +113,8 @@ export default {
       const page = document.querySelector(`canvas[document-page="${p}"]`);
       const documentContainer = this.$refs.documentContainer;
       documentContainer.scrollTo({
-          top: page.offsetTop - documentContainer.offsetTop,
-          behavior: 'smooth'
+        top: page.offsetTop - documentContainer.offsetTop,
+        behavior: 'smooth'
       });
     },
     /**
@@ -153,23 +142,18 @@ export default {
      */
     zoomIn() {
       if (this.scale < 2) {
-        this.scale += 0.25
-        // elimina el renderizado anterior
+        this.scale += 0.25;
         this.$refs['pdf-content'].innerHTML = '';
-        // realiza la carga del documento con la nueva escala
         this.load();
       }
-
     },
     /**
      * Alejamiento del documento
      */
     zoomOut() {
-      if (this.scale > 0) {
-        this.scale -= 0.25
-        // elimina el renderizado anterior
+      if (this.scale > 0.25) {
+        this.scale -= 0.25;
         this.$refs['pdf-content'].innerHTML = '';
-        // realiza la carga del documento con la nueva escala
         this.load();
       }
     },
@@ -177,10 +161,13 @@ export default {
      * Carga de documento en el componente
      */
     async load() {
-      const data = URL.createObjectURL(this.blob);
-      this.pdf = await pdfjsLib.getDocument(data);
+      const url = URL.createObjectURL(this.blob);
+
+      // pdf.js 4.x (legacy build) → devuelve loadingTask
+      this.pdf = getDocument(url);
+
       this.$refs['sidebar'].innerHTML = '';
-      this.renderDocument()
+      this.renderDocument();
     },
     /**
      * Renderiza una pagina concreta del documento pdf
@@ -190,20 +177,14 @@ export default {
      */
     renderPage(ctx, num, canvas) {
       ctx.getPage(num).then((page) => {
-
         const viewport = page.getViewport({ scale: this.scale });
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-        // const outputScale = window.devicePixelRatio || 1;
-        // const transform = outputScale !== 1
-        //         ? [outputScale, 0, 0, outputScale, 0, 0]
-        //         : null;
         page.render({
           canvasContext: canvas.getContext('2d'),
           viewport: viewport,
-          // transform: transform,
         });
-      })
+      });
     },
     /**
      * Renderiza los thumbnails de las paginas
@@ -214,18 +195,13 @@ export default {
      */
     renderThumbnail(ctx, num, thumb) {
       ctx.getPage(num).then((page) => {
-        // const viewport = page.getViewport(1);
-
         thumb.height = 96;
         thumb.width = 80;
-        // const scale = Math.min(thumb.width / viewport.width, thumb.height / viewport.height);
-
         page.render({
           canvasContext: thumb.getContext('2d'),
           viewport: page.getViewport({ scale: 0.126 }),
-
-        })
-      })
+        });
+      });
     },
     /**
      * Procesa el documento e inicia el trabajo de
@@ -233,32 +209,33 @@ export default {
      */
     renderDocument() {
       this.pdf.promise.then((pdf) => {
-        // obtiene el numero de paginas del documento
         const io = this.intersectionObserver();
         this.numPages = pdf.numPages;
+
         for (let page = 1; page <= pdf.numPages; page++) {
           const canvas = document.createElement('canvas');
           canvas.className = 'pdf-page';
           canvas.setAttribute('id', `page-${page}`);
-          canvas.setAttribute('document-page', page)
-          io.observe(canvas)
+          canvas.setAttribute('document-page', page);
+          io.observe(canvas);
           this.$refs['pdf-content'].appendChild(canvas);
           this.renderPage(pdf, page, canvas);
 
-          const thumb = document.createElement('canvas')
-          thumb.className = 'thumbnail'
+          const thumb = document.createElement('canvas');
+          thumb.className = 'thumbnail';
           const thumbId = `thumb-page-${page}`;
-          thumb.setAttribute('id', thumbId)
-          thumb.setAttribute('ref', thumbId)
+          thumb.setAttribute('id', thumbId);
+          thumb.setAttribute('ref', thumbId);
           thumb.addEventListener('click', () => {
-            this.setPage(page)
-          })
+            this.setPage(page);
+          });
 
           this.$refs['sidebar'].appendChild(thumb);
-          this.renderThumbnail(pdf, page, thumb)
+          this.renderThumbnail(pdf, page, thumb);
         }
-        const fThumb = document.getElementById(`thumb-page-1`);
-        fThumb.classList.add(['active'])
+
+        const fThumb = document.getElementById('thumb-page-1');
+        fThumb.classList.add(['active']);
       });
     },
     /**
@@ -266,18 +243,18 @@ export default {
      * @return void
      */
     print() {
-      printJS(URL.createObjectURL(this.blob))
+      printJS(URL.createObjectURL(this.blob));
     },
     /**
-     * Provee una vía asíncrona para observar cambios en la intersección 
-     * de un elemento con un elemento ancestro o con el viewport del 
+     * Provee una vía asíncrona para observar cambios en la intersección
+     * de un elemento con un elemento ancestro o con el viewport del
      * documento de nivel superior.
-     * @retrun { IntersectionObserver } 
+     * @retrun { IntersectionObserver }
      */
     intersectionObserver() {
       const options = {
         root: this.$refs['pdf-content'],
-        rootMargin: "0px",
+        rootMargin: '0px',
         thresholds: [0.7],
       };
       const io = new IntersectionObserver((entries) => {
